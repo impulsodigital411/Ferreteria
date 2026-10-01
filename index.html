@@ -3,76 +3,105 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Impulso | Ferretería Demo v0.2</title>
+  <title>Impulso | Sistema de Gestión para Ferretería</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div id="toast" class="toast"></div>
 
-<!-- LOGIN -->
 <section id="loginView" class="login-view">
   <div class="login-layout">
     <div class="brand-panel">
-      <img src="Imagen de ChatGPT 30 sept 2026, 12_30_55 p.m..png" alt="Impulso" class="login-logo">
+      <img src="assets/logo-impulso.png" alt="Impulso" class="login-logo">
       <div>
         <span class="eyebrow">IMPULSO · PROPUESTA COMERCIAL</span>
-        <h1>Gestión para Ferretería</h1>
-        <p>Stock, ventas, compras, caja, proveedores, clientes, reportes y asistencia del personal.</p>
+        <h1>Sistema de gestión para ferretería</h1>
+        <p>Una demostración funcional del flujo de ventas, inventario, compras, caja y administración del negocio.</p>
       </div>
       <div class="feature-chips">
-        <span>Stock inteligente</span><span>Ventas</span><span>Contabilidad</span><span>Asistencia</span>
+        <span>Venta rápida</span><span>Inventario</span><span>Compras</span><span>Caja</span><span>Reportes</span>
       </div>
     </div>
 
     <div class="login-card">
-      <span class="pill">Propuesta v0.3</span>
+      <span class="pill">Demo funcional v0.4</span>
       <h2>Ingresar al sistema</h2>
-      <p class="muted">Elegí un perfil de demostración o usá las credenciales.</p>
+      <p class="muted">Los perfiles permiten mostrar diferentes permisos dentro del sistema.</p>
+
       <form id="loginForm">
         <label>Usuario</label>
         <input id="username" autocomplete="username" placeholder="admin o vendedor" required>
         <label>Contraseña</label>
-        <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+        <input id="password" type="password" autocomplete="current-password" placeholder="Contraseña" required>
         <button class="btn primary full" type="submit">Ingresar</button>
         <div id="loginError" class="error"></div>
       </form>
 
       <div class="demo-users">
-        <button class="demo-user" data-user="admin" data-pass="admin123">
-          <b>Administrador / Jefe</b><small>admin · admin123</small>
+        <button type="button" class="demo-user" data-user="admin" data-pass="admin123">
+          <b>Administrador</b><small>admin · admin123</small>
         </button>
-        <button class="demo-user" data-user="vendedor" data-pass="vendedor123">
+        <button type="button" class="demo-user" data-user="vendedor" data-pass="vendedor123">
           <b>Vendedor</b><small>vendedor · vendedor123</small>
         </button>
       </div>
-
-      <button id="openAttendanceKiosk" class="btn secondary full">Marcar asistencia</button>
-      <p class="tiny muted center">El punto de asistencia funciona sin entrar al panel administrativo.</p>
     </div>
   </div>
 </section>
 
-<!-- APP -->
 <section id="appView" class="app-view hidden">
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <img src="Imagen de ChatGPT 30 sept 2026, 12_30_55 p.m..png" alt="Impulso">
+      <img src="assets/logo-impulso.png" alt="Impulso">
       <div><strong>IMPULSO</strong><small>Ferretería</small></div>
     </div>
 
-    <nav id="navMenu" class="nav-menu">
-      <button class="nav-item active" data-section="dashboard"><span>Dashboard</span></button>
-      <button class="nav-item seller-access" data-section="ventas"><span>Ventas</span></button>
-      <button class="nav-item seller-access" data-section="inventario"><span>Inventario</span></button>
-      <button class="nav-item admin-only" data-section="movimientos"><span>Stock / Movimientos</span></button>
-      <button class="nav-item admin-only" data-section="compras"><span>Compras</span></button>
-      <button class="nav-item admin-only" data-section="proveedores"><span>Proveedores</span></button>
-      <button class="nav-item seller-access" data-section="clientes"><span>Clientes</span></button>
-      <button class="nav-item admin-only" data-section="contabilidad"><span>Caja / Contabilidad</span></button>
-      <button class="nav-item admin-only" data-section="asistencia"><span>Asistencia</span></button>
-      <button class="nav-item admin-only" data-section="reportes"><span>Reportes</span></button>
-      <button class="nav-item admin-only" data-section="usuarios"><span>Usuarios</span></button>
-    </nav>
+
+<nav class="nav-menu">
+   <button class="nav-item admin-only" data-section="dashboard"><span>Dashboard</span></button>
+
+  <div class="nav-group">
+    <button class="nav-group-toggle" type="button" data-group="stockGroup" aria-expanded="true">
+      <span>Stock e Inventario</span><span class="chevron">⌄</span>
+    </button>
+    <div id="stockGroup" class="nav-submenu open">
+      <button class="nav-subitem seller-access" data-section="inventario">Productos</button>
+      <button class="nav-subitem admin-only" data-section="categorias">Categorías</button>
+      <button class="nav-subitem admin-only" data-section="movimientos">Movimientos de stock</button>
+      <button class="nav-subitem admin-only" data-section="compras">Compras</button>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <button class="nav-group-toggle" type="button" data-group="accountingGroup" aria-expanded="true">
+      <span>Contabilidad</span><span class="chevron">⌄</span>
+    </button>
+    <div id="accountingGroup" class="nav-submenu open">
+      <button class="nav-subitem seller-access active" data-section="ventas">Ventas</button>
+      <button class="nav-subitem admin-only" data-section="contabilidad">Caja / Finanzas</button>
+      <button class="nav-subitem admin-only" data-section="reportes">Reportes</button>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <button class="nav-group-toggle admin-only" type="button" data-group="personalGroup" aria-expanded="false">
+      <span>Personal</span><span class="chevron">⌄</span>
+    </button>
+    <div id="personalGroup" class="nav-submenu admin-only">
+      <button class="nav-subitem" data-section="empleados">Empleados</button>
+      <button class="nav-subitem" data-section="asistencias">Asistencias</button>
+    </div>
+  </div>
+
+  <div class="nav-group admin-only">
+    <button class="nav-group-toggle" type="button" data-group="adminGroup" aria-expanded="false">
+      <span>Administración</span><span class="chevron">⌄</span>
+    </button>
+    <div id="adminGroup" class="nav-submenu">
+      <button class="nav-subitem" data-section="usuarios">Usuarios</button>
+    </div>
+  </div>
+</nav>
 
     <div class="sidebar-footer">
       <div class="user-card">
@@ -87,99 +116,113 @@
     <header class="topbar">
       <div>
         <span class="eyebrow">FERRETERÍA · SISTEMA DE GESTIÓN</span>
-        <h2 id="pageTitle">Dashboard</h2>
+        <h2 id="pageTitle">Ventas</h2>
       </div>
       <div class="top-actions">
         <div class="status"><i></i><span>Entorno de demostración</span></div>
-        <button id="resetDemo" class="btn ghost small">Restablecer demo</button>
+         <button id="resetDemo" class="btn ghost small admin-only">Restablecer datos de demostración</button>
       </div>
     </header>
 
     <div class="content">
 
-      <!-- DASHBOARD -->
-      <section id="dashboard" class="section active">
-        <div class="hero">
-          <div>
-            <span class="pill">Resumen general</span>
-            <h3>Visión general del negocio</h3>
-            <p>Información operativa y financiera organizada para el seguimiento diario.</p>
-          </div>
-          <div class="hero-actions">
-            <button class="btn primary seller-access" data-go="ventas">+ Nueva venta</button>
-            <button class="btn secondary admin-only" data-go="compras">+ Registrar compra</button>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-          <article class="stat-card"><span>Ventas de hoy</span><strong id="kpiSalesToday">$0</strong><small id="kpiSalesCount">0 operaciones</small></article>
-          <article class="stat-card"><span>Productos</span><strong id="kpiProducts">0</strong><small>artículos activos</small></article>
-          <article class="stat-card"><span>Stock crítico</span><strong id="kpiLowStock">0</strong><small>requieren reposición</small></article>
-          <article class="stat-card admin-only"><span>Resultado del mes</span><strong id="kpiMonthResult">$0</strong><small>ingresos - egresos</small></article>
-        </div>
-
-        <div class="grid-2">
-          <article class="panel">
-            <div class="panel-head"><div><h3>Productos con stock bajo</h3><p>Prioridad de reposición.</p></div></div>
-            <div id="lowStockList" class="list"></div>
-          </article>
-          <article class="panel">
-            <div class="panel-head"><div><h3>Actividad reciente</h3><p>Últimos movimientos del negocio.</p></div></div>
-            <div id="recentActivity" class="list"></div>
-          </article>
-        </div>
-
-        <div class="panel admin-only top-gap">
-          <div class="panel-head">
-            <div><h3>Resumen mensual</h3><p>Comparación visual de ingresos y egresos.</p></div>
-          </div>
-          <div id="monthlyBars" class="bars"></div>
-        </div>
-      </section>
-
       <!-- VENTAS -->
-      <section id="ventas" class="section seller-access">
+      <section id="ventas" class="section active seller-access">
         <div class="section-toolbar">
-          <div><h3>Ventas</h3><p>Registrar ventas y consultar comprobantes recientes.</p></div>
-          <button id="newSaleBtn" class="btn primary">+ Nueva venta</button>
-        </div>
-        <div class="stats-grid compact-3">
-          <article class="stat-card"><span>Ventas de hoy</span><strong id="salesTodayTotal">$0</strong><small>importe total</small></article>
-          <article class="stat-card"><span>Operaciones hoy</span><strong id="salesTodayCount">0</strong><small>comprobantes</small></article>
-          <article class="stat-card"><span>Ticket promedio</span><strong id="avgTicket">$0</strong><small>promedio del día</small></article>
+          <div><h3>Ventas</h3><p>Consultá operaciones anteriores o registrá una nueva venta de mostrador.</p></div>
+          <button id="newSaleBtn" class="btn primary">Nueva venta</button>
         </div>
         <div class="panel">
-          <div class="filters">
-            <input id="saleSearch" placeholder="Buscar por comprobante, cliente o vendedor...">
-            <input id="saleDate" type="date">
+          <div class="panel-head">
+            <div><h3>Historial de ventas</h3><p>Consultar operaciones realizadas y anular una venta cuando corresponda.</p></div>
+          </div>
+          <div class="filters filters-4">
+            <input id="saleSearch" placeholder="Número de venta..." aria-label="Buscar número de venta">
+            <input id="saleDate" type="date" aria-label="Fecha de venta">
             <select id="saleMethod"><option value="">Todos los medios</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Mixto</option></select>
+            <select id="saleStatus"><option value="">Todos los estados</option><option>Vigente</option><option>Anulada</option></select>
+            <input id="saleSeller" placeholder="Vendedor..." aria-label="Buscar vendedor">
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Comprobante</th><th>Fecha</th><th>Cliente</th><th>Items</th><th>Total</th><th>Medio</th><th>Vendedor</th></tr></thead>
+              <thead><tr><th>Nº venta</th><th>Fecha / hora</th><th>Productos</th><th>Subtotal</th><th>Ajuste</th><th>Total</th><th>Medio de pago</th><th>Vendedor</th><th>Estado</th><th>Acciones</th></tr></thead>
               <tbody id="salesTable"></tbody>
             </table>
           </div>
         </div>
       </section>
 
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="section">
+        <div class="hero">
+          <div>
+            <span class="pill">Resumen general</span>
+            <h3>Visión general del negocio</h3>
+            <p>Información operativa y financiera organizada para el seguimiento diario.</p>
+          </div>
+          <button class="btn primary seller-access" data-go="ventas">Ir a ventas</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span>Ventas de hoy</span><strong id="kpiSalesToday">$0</strong><small id="kpiSalesCount">0 operaciones</small></article>
+          <article class="stat-card"><span>Productos</span><strong id="kpiProducts">0</strong><small>artículos activos</small></article>
+           <article class="stat-card"><span>Stock bajo</span><strong id="kpiLowStock">0</strong><small>requieren reposición</small></article>
+           <article class="stat-card admin-only"><span>Resultado del período</span><strong id="kpiMonthResult">$0</strong><small>ingresos - egresos</small></article>
+           <article class="stat-card"><span>Sin stock</span><strong id="kpiZeroStock">0</strong><small>productos agotados</small></article>
+           <article class="stat-card admin-only"><span>Ingresos</span><strong id="kpiIncome">$0</strong><small>movimientos vigentes</small></article>
+           <article class="stat-card admin-only"><span>Inventario estimado</span><strong id="kpiInventory">$0</strong><small>valor al costo</small></article>
+           <article class="stat-card admin-only"><span>Personal presente</span><strong id="kpiPresent">0</strong><small>sesiones abiertas</small></article>
+        </div>
+
+        <div class="grid-2">
+          <article class="panel">
+            <div class="panel-head"><div><h3>Productos con stock bajo</h3><p>Artículos que requieren reposición.</p></div></div>
+            <div id="lowStockList" class="list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><h3>Últimas operaciones</h3><p>Actividad reciente del sistema.</p></div></div>
+            <div id="recentActivity" class="list"></div>
+          </article>
+        </div>
+      </section>
+
       <!-- INVENTARIO -->
       <section id="inventario" class="section seller-access">
         <div class="section-toolbar">
-          <div><h3>Inventario</h3><p>Consulta rápida de productos, precios y disponibilidad.</p></div>
-          <button id="newProductBtn" class="btn primary admin-only">+ Producto</button>
+          <div><h3>Inventario</h3><p>Productos, precios, disponibilidad y stock mínimo.</p></div>
+          <button id="newProductBtn" class="btn primary admin-only">Nuevo producto</button>
         </div>
         <div class="panel">
           <div class="filters filters-4">
-            <input id="productSearch" placeholder="Nombre, código, marca o categoría...">
+            <input id="productSearch" placeholder="Código, nombre o categoría...">
             <select id="categoryFilter"><option value="">Todas las categorías</option></select>
-            <select id="brandFilter"><option value="">Todas las marcas</option></select>
             <select id="stockFilter"><option value="">Todo el stock</option><option value="low">Stock bajo</option><option value="ok">Stock normal</option><option value="zero">Sin stock</option></select>
+            <select id="productStatusFilter"><option value="">Todos</option><option value="Activo">Activos</option><option value="Inactivo">Inactivos</option></select>
+          </div>
+          <div class="table-wrap">
+             <table>
+               <thead><tr><th>Código</th><th>Producto</th><th>Categoría</th><th>Unidad</th><th class="admin-only">Costo</th><th>Venta</th><th>Stock</th><th>Mín.</th><th>Estado</th><th></th></tr></thead>
+              <tbody id="productsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- CATEGORIAS -->
+      <section id="categorias" class="section admin-only">
+        <div class="section-toolbar">
+          <div><h3>Categorías</h3><p>Organización del catálogo para acelerar búsquedas y carga de productos.</p></div>
+          <button id="newCategoryBtn" class="btn primary">Nueva categoría</button>
+        </div>
+        <div class="panel">
+          <div class="filters two">
+            <input id="categorySearch" placeholder="Buscar categoría...">
+            <select id="categoryStatusFilter"><option value="">Todas</option><option value="Activo">Activas</option><option value="Inactivo">Inactivas</option></select>
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Código</th><th>Producto</th><th>Marca</th><th>Categoría</th><th>Unidad</th><th class="admin-only">Costo</th><th>Venta</th><th>Stock</th><th>Mín.</th><th>Estado</th><th class="admin-only"></th></tr></thead>
-              <tbody id="productsTable"></tbody>
+              <thead><tr><th>Categoría</th><th>Descripción</th><th>Productos</th><th>Estado</th><th></th></tr></thead>
+              <tbody id="categoriesTable"></tbody>
             </table>
           </div>
         </div>
@@ -188,18 +231,25 @@
       <!-- MOVIMIENTOS -->
       <section id="movimientos" class="section admin-only">
         <div class="section-toolbar">
-          <div><h3>Stock y movimientos</h3><p>Trazabilidad de entradas, salidas y ajustes.</p></div>
-          <button id="newStockMoveBtn" class="btn primary">+ Movimiento</button>
-        </div>
+          <div><h3>Stock y movimientos</h3><p>Entradas, salidas, ajustes y trazabilidad del inventario.</p></div>
+          <button id="newStockMoveBtn" class="btn primary">Registrar movimiento</button>
+         </div>
+         <div class="stats-grid compact-4">
+           <article class="stat-card"><span>Disponibles</span><strong id="stockAvailable">0</strong></article>
+           <article class="stat-card"><span>Stock bajo</span><strong id="stockLow">0</strong></article>
+           <article class="stat-card"><span>Sin stock</span><strong id="stockZero">0</strong></article>
+           <article class="stat-card"><span>Unidades en inventario</span><strong id="stockUnits">0</strong></article>
+         </div>
         <div class="panel">
-          <div class="filters">
-            <input id="moveSearch" placeholder="Buscar producto, motivo o usuario...">
+          <div class="filters filters-4">
+            <input id="moveSearch" placeholder="Producto, motivo o usuario...">
             <select id="moveType"><option value="">Todos los tipos</option><option>Entrada</option><option>Salida</option><option>Ajuste</option></select>
             <input id="moveDate" type="date">
+            <select id="moveStatus"><option value="">Todos los estados</option><option>Vigente</option><option>Anulado</option></select>
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th>Cantidad</th><th>Motivo</th><th>Usuario</th></tr></thead>
+              <thead><tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th>Cantidad</th><th>Motivo</th><th>Usuario</th><th>Estado</th><th></th></tr></thead>
               <tbody id="movesTable"></tbody>
             </table>
           </div>
@@ -209,59 +259,20 @@
       <!-- COMPRAS -->
       <section id="compras" class="section admin-only">
         <div class="section-toolbar">
-          <div><h3>Compras</h3><p>Ingresos de mercadería y costos de reposición.</p></div>
-          <button id="newPurchaseBtn" class="btn primary">+ Registrar compra</button>
+          <div><h3>Compras</h3><p>Registro de reposición de mercadería y actualización de costos.</p></div>
+          <button id="newPurchaseBtn" class="btn primary">Nueva compra</button>
         </div>
         <div class="panel">
-          <div class="filters">
-            <input id="purchaseSearch" placeholder="Proveedor, número o producto...">
+          <div class="filters filters-4">
+            <input id="purchaseSearch" placeholder="Nº, comercio o descripción...">
             <input id="purchaseDate" type="date">
-            <select id="purchaseStatus"><option value="">Todos los estados</option><option>Pagada</option><option>Pendiente</option></select>
+             <select id="purchasePayment"><option value="">Todos los medios</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Mixto</option></select>
+            <select id="purchaseStatus"><option value="">Todos los estados</option><option>Vigente</option><option>Anulada</option></select>
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Nº compra</th><th>Fecha</th><th>Proveedor</th><th>Productos</th><th>Total</th><th>Estado</th><th>Medio</th></tr></thead>
+              <thead><tr><th>Nº compra</th><th>Fecha</th><th>Comercio / Referencia</th><th>Detalle</th><th>Total</th><th>Medio</th><th>Estado</th><th></th></tr></thead>
               <tbody id="purchasesTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- PROVEEDORES -->
-      <section id="proveedores" class="section admin-only">
-        <div class="section-toolbar">
-          <div><h3>Proveedores</h3><p>Contacto, saldo y actividad comercial.</p></div>
-          <button id="newSupplierBtn" class="btn primary">+ Proveedor</button>
-        </div>
-        <div class="panel">
-          <div class="filters two">
-            <input id="supplierSearch" placeholder="Buscar proveedor, teléfono o rubro...">
-            <select id="supplierBalance"><option value="">Todos</option><option value="debt">Con saldo pendiente</option><option value="clear">Sin deuda</option></select>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Proveedor</th><th>Rubro</th><th>Teléfono</th><th>Última compra</th><th>Saldo</th><th>Estado</th></tr></thead>
-              <tbody id="suppliersTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- CLIENTES -->
-      <section id="clientes" class="section seller-access">
-        <div class="section-toolbar">
-          <div><h3>Clientes</h3><p>Datos de contacto e historial básico.</p></div>
-          <button id="newClientBtn" class="btn primary">+ Cliente</button>
-        </div>
-        <div class="panel">
-          <div class="filters two">
-            <input id="clientSearch" placeholder="Buscar nombre, DNI/CUIT o teléfono...">
-            <select id="clientType"><option value="">Todos</option><option>Consumidor final</option><option>Cuenta corriente</option><option>Profesional</option></select>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Cliente</th><th>DNI / CUIT</th><th>Teléfono</th><th>Tipo</th><th>Compras</th><th class="admin-only">Saldo</th></tr></thead>
-              <tbody id="clientsTable"></tbody>
             </table>
           </div>
         </div>
@@ -270,54 +281,29 @@
       <!-- CONTABILIDAD -->
       <section id="contabilidad" class="section admin-only">
         <div class="section-toolbar">
-          <div><h3>Caja y contabilidad</h3><p>Ingresos, egresos y control de caja diaria.</p></div>
-          <button id="newAccountingBtn" class="btn primary">+ Movimiento manual</button>
+          <div><h3>Caja y contabilidad</h3><p>Movimientos provenientes de ventas, compras y registros manuales.</p></div>
+          <button id="newAccountingBtn" class="btn primary">Nuevo movimiento</button>
         </div>
         <div class="stats-grid compact-4">
-          <article class="stat-card"><span>Ingresos</span><strong id="accountIncome">$0</strong><small>mes actual</small></article>
-          <article class="stat-card"><span>Egresos</span><strong id="accountExpense">$0</strong><small>mes actual</small></article>
-          <article class="stat-card"><span>Resultado</span><strong id="accountBalance">$0</strong><small>mes actual</small></article>
-          <article class="stat-card"><span>Caja estimada</span><strong id="cashEstimate">$0</strong><small>movimientos en efectivo</small></article>
+          <article class="stat-card"><span>Ingresos</span><strong id="accountIncome">$0</strong><small>vigentes</small></article>
+          <article class="stat-card"><span>Egresos</span><strong id="accountExpense">$0</strong><small>vigentes</small></article>
+          <article class="stat-card"><span>Resultado</span><strong id="accountBalance">$0</strong><small>saldo del período</small></article>
+           <article class="stat-card"><span>Efectivo</span><strong id="cashEstimate">$0</strong><small>saldo estimado</small></article>
+           <article class="stat-card"><span>Transferencia</span><strong id="transferEstimate">$0</strong><small>saldo estimado</small></article>
+           <article class="stat-card"><span>Tarjeta</span><strong id="cardEstimate">$0</strong><small>saldo estimado</small></article>
         </div>
         <div class="panel">
           <div class="filters filters-4">
-            <input id="accountSearch" placeholder="Buscar concepto o usuario...">
-            <select id="accountType"><option value="">Todos</option><option>Ingreso</option><option>Egreso</option></select>
+            <input id="accountSearch" placeholder="Concepto, origen o usuario...">
+            <select id="accountType"><option value="">Ingreso / egreso</option><option>Ingreso</option><option>Egreso</option></select>
             <select id="accountMethod"><option value="">Todos los medios</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Mixto</option></select>
-            <input id="accountDate" type="date">
+             <select id="accountStatus"><option value="">Todos los estados</option><option>Vigente</option><option>Anulado</option></select>
+             <input id="accountDate" type="date" aria-label="Fecha de caja">
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Fecha</th><th>Concepto</th><th>Origen</th><th>Tipo</th><th>Monto</th><th>Medio</th><th>Usuario</th></tr></thead>
+               <thead><tr><th>Fecha</th><th>Concepto</th><th>Origen</th><th>Tipo</th><th>Monto</th><th>Medio</th><th>Usuario</th><th>Estado</th><th></th></tr></thead>
               <tbody id="accountingTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ASISTENCIA -->
-      <section id="asistencia" class="section admin-only">
-        <div class="section-toolbar">
-          <div><h3>Asistencia del personal</h3><p>Vista exclusiva del Jefe / Administrador.</p></div>
-          <button id="openKioskFromAdmin" class="btn secondary">Abrir marcador</button>
-        </div>
-        <div class="stats-grid compact-4">
-          <article class="stat-card"><span>Presentes hoy</span><strong id="attendancePresent">0</strong><small>empleados</small></article>
-          <article class="stat-card"><span>Entradas hoy</span><strong id="attendanceEntries">0</strong><small>registros</small></article>
-          <article class="stat-card"><span>Salidas hoy</span><strong id="attendanceExits">0</strong><small>registros</small></article>
-          <article class="stat-card"><span>Personal activo</span><strong id="attendanceEmployees">0</strong><small>empleados</small></article>
-        </div>
-        <div class="panel">
-          <div class="filters filters-4">
-            <input id="attendanceSearch" placeholder="Empleado, DNI o sector...">
-            <select id="attendanceEmployee"><option value="">Todos los empleados</option></select>
-            <select id="attendanceType"><option value="">Entrada y salida</option><option>Entrada</option><option>Salida</option></select>
-            <input id="attendanceDate" type="date">
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Fecha</th><th>Hora</th><th>Empleado</th><th>DNI</th><th>Sector</th><th>Tipo</th><th>Método</th></tr></thead>
-              <tbody id="attendanceTable"></tbody>
             </table>
           </div>
         </div>
@@ -326,71 +312,186 @@
       <!-- REPORTES -->
       <section id="reportes" class="section admin-only">
         <div class="section-toolbar">
-          <div><h3>Reportes</h3><p>Indicadores útiles para el dueño del negocio.</p></div>
-        </div>
-        <div class="report-grid">
+          <div><h3>Reportes</h3><p>Indicadores de ventas, stock y resultados para acompañar decisiones del negocio.</p></div>
+         </div>
+         <div class="filters two report-filters"><label>Desde<input id="reportFrom" type="date"></label><label>Hasta<input id="reportTo" type="date"></label></div>
+         <div class="stats-grid compact-4" id="reportSummary"></div>
+         <div class="report-grid">
           <article class="panel"><h3>Productos más vendidos</h3><div id="topProductsReport" class="report-list"></div></article>
           <article class="panel"><h3>Ventas por medio de pago</h3><div id="paymentReport" class="report-list"></div></article>
-          <article class="panel"><h3>Valor del inventario</h3><div id="inventoryReport" class="big-report"></div></article>
-          <article class="panel"><h3>Deuda a proveedores</h3><div id="supplierDebtReport" class="big-report"></div></article>
+          <article class="panel"><h3>Valor estimado del inventario</h3><div id="inventoryReport" class="big-report"></div></article>
+          <article class="panel"><h3>Rentabilidad estimada</h3><div id="marginReport" class="big-report"></div></article>
+          <article class="panel"><h3>Stock bajo y agotado</h3><div id="reportStock" class="report-list"></div></article>
+          <article class="panel"><h3>Ventas por día</h3><div id="reportDaily" class="report-list"></div></article>
         </div>
       </section>
 
-      <!-- USUARIOS -->
-      <section id="usuarios" class="section admin-only">
+
+      <!-- EMPLEADOS -->
+      <section id="empleados" class="section admin-only">
         <div class="section-toolbar">
-          <div><h3>Usuarios y permisos</h3><p>Accesos separados para administración y ventas.</p></div>
-          <button id="newUserBtn" class="btn primary">+ Usuario</button>
+          <div>
+            <h3>Empleados</h3>
+            <p>Gestión del personal con datos básicos, sector y estado laboral.</p>
+          </div>
+          <button id="newEmployeeBtn" class="btn primary">Nuevo empleado</button>
         </div>
-        <div class="role-boxes">
-          <div><b>Administrador / Jefe</b><span>Acceso total, contabilidad, compras, proveedores, asistencia, reportes y usuarios.</span></div>
-          <div><b>Vendedor</b><span>Ventas, consulta de inventario y clientes. Sin acceso a costos internos, contabilidad ni asistencia.</span></div>
-        </div>
+
+        <div class="stats-grid compact-3">
+           <article class="stat-card"><span>Personal activo</span><strong id="employeeActiveCount">0</strong><small>empleados habilitados</small></article>
+           <article class="stat-card"><span>Presentes hoy</span><strong id="employeePresentCount">0</strong><small>según asistencias</small></article>
+           <article class="stat-card"><span>Sesiones abiertas</span><strong id="employeeOpenCount">0</strong><small>en curso</small></article>
+           <article class="stat-card"><span>Ausentes</span><strong id="employeeAbsentCount">0</strong><small>empleados activos</small></article>
+           <article class="stat-card"><span>Horas hoy</span><strong id="employeeHoursToday">0 h 0 min</strong><small>sesiones finalizadas</small></article>
+           <article class="stat-card"><span>Sectores</span><strong id="employeeSectorCount">0</strong><small>áreas registradas</small></article>
+         </div>
+         <div class="panel top-gap"><div class="panel-head"><h3>Trabajando ahora</h3></div><div id="presentList" class="list"></div></div>
+
         <div class="panel">
+          <div class="filters filters-4">
+            <input id="employeeSearch" placeholder="Nombre, DNI o sector...">
+            <select id="employeeSectorFilter"><option value="">Todos los sectores</option></select>
+            <select id="employeeStatusFilter"><option value="">Todos</option><option>Activo</option><option>Inactivo</option></select>
+            <select id="employeeRoleFilter"><option value="">Todos los puestos</option></select>
+          </div>
+
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Nombre</th><th>Usuario</th><th>Rol</th><th>Estado</th><th>Último acceso</th></tr></thead>
+              <thead>
+                <tr><th>Empleado</th><th>DNI</th><th>Sector</th><th>Puesto</th><th>Teléfono</th><th>Estado</th><th></th></tr>
+              </thead>
+              <tbody id="employeesTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ASISTENCIAS -->
+      <section id="asistencias" class="section admin-only">
+        <div class="section-toolbar">
+          <div>
+            <h3>Asistencias</h3>
+             <p>Sesiones de trabajo vinculadas a lecturas de huella simuladas.</p>
+           </div>
+           <button id="newAttendanceBtn" class="btn primary">Abrir lector de huella</button>
+        </div>
+
+        <div class="stats-grid compact-4">
+           <article class="stat-card"><span>Empleados activos</span><strong id="attendanceEntriesCount">0</strong><small>habilitados</small></article>
+           <article class="stat-card"><span>Sesiones finalizadas hoy</span><strong id="attendanceExitsCount">0</strong><small>con salida</small></article>
+           <article class="stat-card"><span>Presentes</span><strong id="attendancePresentCount">0</strong><small>actualmente</small></article>
+           <article class="stat-card"><span>Horas trabajadas hoy</span><strong id="attendanceTotalCount">0 h 0 min</strong><small>finalizadas</small></article>
+        </div>
+
+        <div class="panel">
+          <div class="filters filters-4">
+            <input id="attendanceSearch" placeholder="Empleado, DNI o sector...">
+            <select id="attendanceEmployeeFilter"><option value="">Todos los empleados</option></select>
+            <select id="attendanceTypeFilter"><option value="">Todos los estados</option><option>En curso</option><option>Finalizada</option><option>Anulada</option></select>
+            <input id="attendanceDateFilter" type="date" aria-label="Fecha exacta">
+            <input id="attendanceFrom" type="date" aria-label="Desde">
+            <input id="attendanceTo" type="date" aria-label="Hasta">
+            <select id="attendanceSectorFilter"><option value="">Todos los sectores</option><option>Mostrador</option><option>Caja</option><option>Depósito</option><option>Administración</option></select>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Empleado / DNI</th><th>Sector</th><th>Fecha</th><th>Entrada</th><th>Salida</th><th>Tiempo trabajado</th><th>Estado</th><th></th></tr>
+              </thead>
+              <tbody id="attendanceTable"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel top-gap"><h3>Resumen por empleado</h3><div id="attendanceSummary" class="table-wrap"></div></div>
+      </section>
+
+<!-- USUARIOS -->
+      <section id="usuarios" class="section admin-only">
+        <div class="section-toolbar">
+          <div><h3>Usuarios y permisos</h3><p>Gestión de acceso para administradores y vendedores.</p></div>
+          <button id="newUserBtn" class="btn primary">Nuevo usuario</button>
+        </div>
+        <div class="role-boxes">
+          <div><b>Administrador</b><span>Acceso completo a productos, categorías, compras, caja, reportes y usuarios.</span></div>
+          <div><b>Vendedor</b><span>Acceso a venta rápida e inventario de consulta, sin información contable ni costos internos.</span></div>
+        </div>
+        <div class="panel">
+          <div class="filters two">
+            <input id="userSearch" placeholder="Buscar nombre o usuario...">
+            <select id="userStatusFilter"><option value="">Todos</option><option>Activo</option><option>Inactivo</option></select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nombre</th><th>Usuario</th><th>Rol</th><th>Estado</th><th>Último acceso</th><th></th></tr></thead>
               <tbody id="usersTable"></tbody>
             </table>
           </div>
         </div>
       </section>
+
     </div>
   </main>
 </section>
 
-<!-- MODAL GENERAL -->
-<div id="modal" class="modal hidden">
-  <div class="modal-card">
-    <div class="modal-head">
-      <div><span class="eyebrow">IMPULSO · FERRETERÍA</span><h3 id="modalTitle">Nuevo registro</h3></div>
-      <button id="closeModal" class="icon-btn">✕</button>
+<div id="saleModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="saleModalTitle">
+  <div class="sale-dialog">
+    <div class="sale-dialog-head">
+      <div><span class="eyebrow">IMPULSO · MOSTRADOR</span><h3 id="saleModalTitle">Nueva venta</h3></div>
+      <button id="closeSaleBtn" type="button" class="icon-btn" aria-label="Cerrar nueva venta">×</button>
     </div>
-    <form id="modalForm" class="modal-form"></form>
+    <div class="sale-dialog-body">
+      <div class="sale-block-head"><div><h4>Productos</h4><p>Agregá los artículos necesarios a la misma operación.</p></div><button id="showProductPicker" type="button" class="btn secondary small" aria-expanded="true">Agregar producto</button></div>
+      <div id="saleProductPicker" class="sale-picker">
+        <div class="sales-search-row">
+          <input id="posSearch" class="pos-search" placeholder="Buscar por código o nombre..." aria-label="Buscar producto" autocomplete="off">
+          <select id="posCategory" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
+        </div>
+        <div id="posResults" class="product-results"></div>
+      </div>
+      <div class="table-wrap sale-cart-wrap">
+        <table class="cart-table"><thead><tr><th>Producto</th><th>Cantidad</th><th>Precio unitario</th><th>Descuento</th><th>Subtotal</th><th>Quitar</th></tr></thead><tbody id="cartTable"></tbody></table>
+      </div>
+      <div id="emptyCart" class="empty-state">Todavía no agregaste productos a la venta.</div>
+      <div class="sale-block-head sale-adjust-heading"><div><h4>Ajuste de la venta</h4><p>Aplicá un descuento o recargo general si corresponde.</p></div></div>
+      <div class="sale-adjust-controls">
+        <label>Tipo de ajuste<select id="saleAdjustment"><option value="none">Sin ajuste</option><option value="discount">Descuento</option><option value="surcharge">Recargo</option></select></label>
+        <label>Aplicar por<select id="saleAdjustmentMode" disabled><option value="percent">Porcentaje</option><option value="fixed">Monto fijo</option></select></label>
+        <label>Valor<input id="saleAdjustmentValue" type="number" min="0" step="0.01" value="0" disabled></label>
+      </div>
+      <div class="sale-block-head sale-payment-heading"><div><h4>Medio de pago</h4></div></div>
+      <div class="sale-payment-method"><label for="cartMethod">Seleccioná un medio</label><select id="cartMethod"><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Mixto</option></select></div>
+      <div id="mixedPayment" class="mixed-payment hidden">
+        <p>Distribuí el total entre los medios utilizados. La suma debe coincidir con el total.</p>
+        <div class="mixed-fields"><label>Efectivo<input id="mixedCash" type="number" min="0" step="0.01" value="0"></label><label>Transferencia<input id="mixedTransfer" type="number" min="0" step="0.01" value="0"></label><label>Tarjeta<input id="mixedCard" type="number" min="0" step="0.01" value="0"></label></div>
+        <div id="mixedBalance" class="form-help" aria-live="polite"></div>
+      </div>
+      <div class="sale-summary"><div><span>Productos</span><b id="cartItemsCount">0</b></div><div><span>Subtotal</span><b id="cartSubtotal">$0</b></div><div><span>Descuento</span><b id="cartDiscountValue">$0</b></div><div><span>Recargo</span><b id="cartSurchargeValue">$0</b></div><div class="sale-summary-total"><span>TOTAL</span><strong id="cartTotal">$0</strong></div><div><span>Medio de pago</span><b id="saleMethodSummary">Efectivo</b></div></div>
+      <p id="saleError" class="error" role="alert"></p>
+    </div>
+    <div class="sale-dialog-footer"><button id="cancelSaleBtn" type="button" class="btn light">Cancelar</button><button id="previewSaleBtn" type="button" class="btn secondary">Vista previa</button><button id="confirmSaleBtn" type="button" class="btn primary">Finalizar venta</button></div>
   </div>
 </div>
 
-<!-- KIOSCO ASISTENCIA -->
-<div id="attendanceKiosk" class="kiosk hidden">
+<div id="kiosk" class="kiosk hidden" role="dialog" aria-modal="true" aria-label="Lector de asistencia">
   <div class="kiosk-card">
-    <div class="kiosk-head">
-      <img src="Imagen de ChatGPT 30 sept 2026, 12_30_55 p.m..png" alt="Impulso">
-      <div><span class="eyebrow">CONTROL DE ASISTENCIA</span><h2>Marcador de empleados</h2></div>
-      <button id="closeKiosk" class="icon-btn">✕</button>
-    </div>
-    <div class="kiosk-time"><strong id="kioskTime">--:--</strong><span id="kioskDate">--</span></div>
+    <div class="kiosk-head"><img src="assets/logo-impulso.png" alt="Impulso"><div><span class="eyebrow">IMPULSO · ASISTENCIA</span><h2>Lector de huella</h2></div><button id="closeKiosk" class="icon-btn" aria-label="Cerrar">×</button></div>
+    <div class="kiosk-time"><strong id="kioskClock"></strong><span id="kioskDate"></span></div>
+    <div class="fingerprint-area"><div class="fingerprint"><div class="fingerprint-mark"></div></div><div><h3 id="readerStatus">Lector listo</h3><p>Esperando lectura de huella. La selección manual de empleado existe solo para esta demo; el lector real lo identificaría automáticamente.</p></div></div>
+    <label for="fingerEmployee">Seleccionar empleado para simular lectura</label>
+    <select id="fingerEmployee"></select>
+    <button id="scanFinger" class="btn primary full">Simular lectura de huella</button>
+    <div id="kioskResult" class="kiosk-result hidden" aria-live="polite"></div>
+  </div>
+</div>
 
-    <div class="fingerprint-area">
-      <div class="fingerprint"><span class="fingerprint-mark"></span></div>
-      <div>
-        <h3>Apoyá tu huella en el lector</h3>
-        <p>En esta maqueta el lector es simulado. Elegí un empleado para demostrar cómo funcionaría.</p>
-      </div>
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div><span class="eyebrow">IMPULSO · FERRETERÍA</span><h3 id="modalTitle">Registro</h3></div>
+      <button id="closeModal" class="icon-btn">×</button>
     </div>
-
-    <div id="kioskEmployees" class="employee-buttons"></div>
-    <div id="kioskResult" class="kiosk-result">Esperando lectura...</div>
-    <div class="tiny muted center">En la versión real, el empleado no seleccionaría su nombre: el lector identificaría la huella automáticamente.</div>
+    <form id="modalForm" class="modal-form"></form>
   </div>
 </div>
 

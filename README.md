@@ -1,78 +1,54 @@
-# Ferretería Impulso — Maqueta funcional v0.3
+# Ferretería Impulso — demo funcional
 
-Maqueta comercial navegable para presentar a una ferretería. Funciona sin backend y guarda los cambios de la demo en el navegador usando LocalStorage.
+Maqueta demostrativa sobre los archivos existentes (`index.html`, `styles.css`, `app.js`). Abrir `index.html` en el navegador. Los datos ficticios se conservan en `localStorage` y el administrador puede restablecerlos desde la barra superior.
 
-## Cómo abrir
-1. Descomprimir el ZIP.
-2. Abrir `index.html` con Chrome o Edge.
-3. Usar uno de los accesos de demostración.
+## Menú principal
 
-## Usuarios
-Administrador / Jefe
-- usuario: admin
-- contraseña: admin123
+### Dashboard
+Resumen general del negocio.
 
-Vendedor
-- usuario: vendedor
-- contraseña: vendedor123
-
-## Módulos incluidos
-- Dashboard
-- Ventas
-- Inventario
+### Stock e Inventario
+- Productos
+- Categorías
 - Movimientos de stock
 - Compras
-- Proveedores
-- Clientes
-- Caja / Contabilidad
-- Asistencia de empleados
-- Reportes
-- Usuarios y roles
 
-## Roles
-Administrador / Jefe:
-- Ve todo.
-- Puede ver costos internos.
-- Accede a compras, proveedores, contabilidad, asistencia, reportes y usuarios.
-
-Vendedor:
-- Puede registrar ventas.
-- Consulta productos, precios y stock.
-- Gestiona clientes.
-- No ve costos, contabilidad, asistencia, proveedores, compras ni usuarios.
-
-## Asistencia
-Incluye un "Marcador de empleados" con lector de huella SIMULADO.
-En la versión real, el empleado apoyaría el dedo y el lector identificaría automáticamente a la persona.
-La demo permite seleccionar un empleado únicamente para poder mostrar visualmente el flujo.
-
-El historial de asistencia solo es visible desde el rol Administrador / Jefe.
-
-## Datos
-La demo viene cargada con:
-- Productos y marcas
+### Contabilidad
 - Ventas
-- Compras
-- Proveedores
-- Clientes
-- Movimientos de caja
+- Caja / Finanzas
+- Reportes
+
+### Personal
 - Empleados
 - Asistencias
-- Reportes
 
-Todos son datos ficticios/mock.
+### Administración
+- Usuarios
 
-## Importante
-Esto NO es todavía el sistema final ni debe usarse para operar un negocio real.
-Sirve para validar requerimientos, mostrar la propuesta al cliente y definir qué funciones conservar, modificar o agregar.
+## Demo funcional
+Ventas es la primera pantalla después del ingreso. Una venta confirmada actualiza stock, genera movimientos de salida e ingreso en caja. Anularla revierte esos efectos y mantiene la trazabilidad.
 
-Versión: 0.2
-Marca: Impulso
+Las compras pueden incluir varios productos; registrar o modificar una compra actualiza existencias, costos, entradas de stock y egresos en caja. Una compra solo puede anularse si aún queda stock suficiente para revertirla. Los movimientos manuales de stock y caja admiten anulación sin eliminar el historial.
 
+Hay búsquedas, filtros, detalles, altas, ediciones y desactivaciones lógicas en los módulos administrativos. Los reportes incluyen filtro por período.
 
-## Cambios visuales v0.3
-- Interfaz sin emojis ni iconografía informal.
-- Paleta neutra y cálida orientada a software comercial.
-- Tablas, formularios y navegación más sobrios.
-- Jerarquía visual, espaciado y contraste mejorados.
-- Marcador de asistencia rediseñado.
+El módulo Personal incorpora:
+- CRUD de empleados.
+- Sectores y puestos.
+- Estado activo/inactivo.
+- Lector de huella simulado con selección de empleado exclusivamente para la demo.
+- Primera lectura: sesión abierta y entrada. Segunda lectura: salida y horas trabajadas calculadas.
+- Historial, correcciones con motivo, anulaciones, filtros e indicadores por empleado.
+
+El vendedor accede a ventas y a la consulta del inventario, sin precios de costo ni módulos administrativos. El administrador puede crear usuarios con contraseña y permisos según el rol. Las claves son locales y ficticias: no se trata de autenticación de producción.
+
+## Accesos de demostración
+Administrador:
+- Usuario: admin
+- Contraseña: admin123
+
+Vendedor:
+- Usuario: vendedor
+- Contraseña: vendedor123
+
+Los usuarios creados en la demo también pueden iniciar sesión con su contraseña local.
