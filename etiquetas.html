@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Etiquetas · Ferretería Impulso</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;padding:24px;font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#22231f;background:#f3f1ec}
+    h1{font-size:22px;margin:0 0 4px}
+    .help{color:#686a63;margin:0 0 20px;max-width:70ch}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    button{font:inherit;padding:9px 14px;border-radius:9px;border:1px solid #ded9d0;background:#fff;cursor:pointer}
+    button.primary{background:#8a6a43;border-color:#8a6a43;color:#fff}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+    .label{background:#fff;border:1px solid #ded9d0;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;break-inside:avoid}
+    .label .name{font-weight:700;font-size:14px;line-height:1.25}
+    .label .meta{font-size:11px;color:#686a63}
+    .label .code{margin-top:auto;font-size:11px;color:#686a63;text-align:center;letter-spacing:.04em}
+    .label svg{display:block;width:100%;height:auto}
+    .status{padding:10px 14px;border-radius:9px;background:#e9dfd1;font-size:13px;margin-bottom:16px}
+    @media print{
+      body{background:#fff;padding:0}
+      h1,.help,.toolbar,.status{display:none}
+      .grid{grid-template-columns:repeat(3,1fr);gap:6mm}
+      .label{border:1px dashed #bbb;border-radius:6px;padding:8px;box-shadow:none}
+      @page{margin:10mm}
+    }
+  </style>
+</head>
+<body>
+  <h1>Etiquetas de productos</h1>
+  <p class="help">
+    Imprimí esta hoja y usala para probar el escaner: apuntá la camara del celular a una
+    etiqueta y el producto se carga solo en el punto de venta. Los codigos son EAN-13
+    ficticios con prefijo argentino 779 y digito verificador correcto.
+  </p>
+  <div class="toolbar">
+    <button class="primary" onclick="window.print()">Imprimir</button>
+    <button onclick="location.href='index.html'">Volver a la app</button>
+  </div>
+  <div id="status" class="status">Generando codigos...</div>
+  <div id="grid" class="grid"></div>
+
+  <script src="assets/vendor/zxing.min.js"></script>
+  <script>
+    const PRODUCTS=[
+      {name:"Martillo carpintero 16 oz",unit:"unidad",price:19500,barcode:"7791000000017"},
+      {name:"Cinta aisladora negra 20 m",unit:"unidad",price:1800,barcode:"7791000000024"},
+      {name:"Tornillo autoperforante 8x1",unit:"unidad",price:100,barcode:"7791000000031"},
+      {name:"Cable unipolar 2,5 mm",unit:"metro",price:1200,barcode:"7791000000048"},
+      {name:"Llave de paso 1/2",unit:"unidad",price:5900,barcode:"7791000000055"},
+      {name:"Disco de corte 115 mm",unit:"unidad",price:2800,barcode:"7791000000062"},
+      {name:"Silicona transparente 280 ml",unit:"unidad",price:4700,barcode:"7791000000079"},
+      {name:"Rodillo antigota 22 cm",unit:"unidad",price:7900,barcode:"7791000000086"},
+      {name:"Caño PVC 40 mm x 4 m",unit:"unidad",price:12900,barcode:"7791000000093"},
+      {name:"Mecha widia 8 mm",unit:"unidad",price:5200,barcode:"7791000000109"},
+      {name:"Látex interior blanco 20 L",unit:"balde",price:89900,barcode:"7791000000116"}
+    ];
+    const money=n=>new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS"}).format(n);
+    const grid=document.getElementById("grid");
+    const status=document.getElementById("status");
+
+    function buildBarcodeSvg(text){
+      // ZXing dibuja las barras como <rect> reales dentro de un <svg>. El writer
+      // devuelve un nodo del DOM, no una cadena: hay que insertarlo en el documento.
+      const writer=new ZXing.BrowserQRCodeSvgWriter();
+      const svg=writer.write(text,ZXing.BarcodeFormat.EAN_13);
+      // viewBox explicito para que el SVG escale al ancho de la etiqueta.
+      svg.setAttribute("preserveAspectRatio","xMidYMid meet");
+      return svg;
+    }
+
+    function render(){
+      if(typeof ZXing==="undefined"){
+        status.textContent="No se cargo ZXing. Revisa assets/vendor/zxing.min.js";
+        return;
+      }
+      let made=0;
+      for(const p of PRODUCTS){
+        const label=document.createElement("div");
+        label.className="label";
+        const name=document.createElement("div");
+        name.className="name";
+        name.textContent=p.name;
+        const meta=document.createElement("div");
+        meta.className="meta";
+        meta.textContent=`${money(p.price)} / ${p.unit}`;
+        const code=document.createElement("div");
+        code.className="code";
+        code.textContent=p.barcode;
+        label.appendChild(name);
+        label.appendChild(meta);
+        try{
+          label.appendChild(buildBarcodeSvg(p.barcode));
+          made++;
+        }catch(error){
+          const warn=document.createElement("div");
+          warn.className="meta";
+          warn.textContent=`No se pudo dibujar: ${error.message}`;
+          label.appendChild(warn);
+        }
+        label.appendChild(code);
+        grid.appendChild(label);
+      }
+      status.textContent=`${made} de ${PRODUCTS.length} etiquetas listas. Imprimir y apuntar la cámara.`;
+    }
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Claves privadas y certificados: nunca al repo
+.certs/
+*.pem
+*.key
+*.crt
+*.p12
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/

@@ -38,19 +38,21 @@
       </form>
 
       <div class="demo-users">
-        <button type="button" class="demo-user" data-user="admin" data-pass="admin123">
-          <b>Administrador</b><small>admin · admin123</small>
-        </button>
-        <button type="button" class="demo-user" data-user="vendedor" data-pass="vendedor123">
-          <b>Vendedor</b><small>vendedor · vendedor123</small>
-        </button>
+<button type="button" class="demo-user" data-user="admin" data-pass="xjbhoeyp8k">
+  <b>Administrador</b><small>admin · xjbhoeyp8k</small>
+</button>
+<button type="button" class="demo-user" data-user="vendedor" data-pass="1fmab8n5ow">
+  <b>Vendedor</b><small>vendedor · 1fmab8n5ow</small>
+</button>
       </div>
     </div>
   </div>
 </section>
 
 <section id="appView" class="app-view hidden">
-  <aside class="sidebar">
+  <div id="menuOverlay" class="menu-overlay" hidden></div>
+  <aside class="sidebar" id="sidebar">
+    <button id="menuClose" class="icon-btn sidebar-close" type="button" aria-label="Cerrar menú">×</button>
     <div class="sidebar-brand">
       <img src="assets/logo-impulso.png" alt="Impulso">
       <div><strong>IMPULSO</strong><small>Ferretería</small></div>
@@ -114,6 +116,7 @@
 
   <main class="main">
     <header class="topbar">
+      <button id="menuToggle" class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
       <div>
         <span class="eyebrow">FERRETERÍA · SISTEMA DE GESTIÓN</span>
         <h2 id="pageTitle">Ventas</h2>
@@ -441,7 +444,8 @@
       <button id="closeSaleBtn" type="button" class="icon-btn" aria-label="Cerrar nueva venta">×</button>
     </div>
     <div class="sale-dialog-body">
-      <div class="sale-block-head"><div><h4>Productos</h4><p>Agregá los artículos necesarios a la misma operación.</p></div><button id="showProductPicker" type="button" class="btn secondary small" aria-expanded="true">Agregar producto</button></div>
+      <div class="sale-block-head"><div><h4>Productos</h4><p>Agregá los artículos necesarios a la misma operación.</p></div><div class="sale-head-actions"><button id="scanProductBtn" type="button" class="btn primary small">Escanear y agregar</button><button id="scanCodeOnlyBtn" type="button" class="btn secondary small">Solo leer código</button><button id="showProductPicker" type="button" class="btn secondary small" aria-expanded="true">Agregar producto</button></div></div>
+      <div id="lastScannedBox" class="last-scanned hidden"><span>Último código leído</span><b id="lastScannedCode">—</b></div>
       <div id="saleProductPicker" class="sale-picker">
         <div class="sales-search-row">
           <input id="posSearch" class="pos-search" placeholder="Buscar por código o nombre..." aria-label="Buscar producto" autocomplete="off">
@@ -495,6 +499,62 @@
   </div>
 </div>
 
+<!-- ESCANER DE CODIGOS DE BARRAS -->
+<div id="scanner" class="scanner hidden">
+  <div class="scanner-card">
+    <div class="scanner-head">
+      <div><span class="eyebrow">IMPULSO · LECTURA</span><h3 id="scanTitle">Escanear código</h3></div>
+      <div class="scanner-head-actions">
+        <button type="button" class="btn light small" onclick="switchScanCamera()">Cambiar cámara</button>
+        <button id="closeScanner" type="button" class="icon-btn" aria-label="Cerrar escaner">×</button>
+      </div>
+    </div>
+    <div class="scanner-stage">
+      <video id="scanVideo" playsinline muted></video>
+      <div id="scanBox" class="scan-box" aria-hidden="true"><span class="scan-box-hint">dentro del cuadro</span></div>
+    </div>
+    <p id="scanMessage" class="scan-message"></p>
+    <p id="scanDebug" class="scan-debug"></p>
+    <p id="scanError" class="scanner-error hidden"></p>
+    <div class="scan-controls">
+      <label>Ancho del cuadro
+        <input id="scanBoxW" type="range" min="15" max="100" value="72" oninput="setScanBox('w',this.value)">
+      </label>
+      <label>Alto del cuadro
+        <input id="scanBoxH" type="range" min="15" max="100" value="72" oninput="setScanBox('h',this.value)">
+      </label>
+      <label>Izquierda / Derecha
+        <input id="scanBoxX" type="range" min="5" max="95" value="50" oninput="setScanBox('cx',this.value)">
+      </label>
+      <label>Arriba / Abajo
+        <input id="scanBoxY" type="range" min="5" max="95" value="50" oninput="setScanBox('cy',this.value)">
+      </label>
+    </div>
+    <div class="scan-actions">
+      <button id="freeScanToggle" type="button" class="btn light small" onclick="toggleFreeScan(this.classList.contains('on')?false:true)">Escaneo libre</button>
+      <button type="button" class="btn light small" onclick="resetScanBox()">Recuadro por defecto</button>
+    </div>
+    <details class="scan-history">
+      <summary>Lecturas de esta sesión</summary>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Código</th><th>Formato</th><th>Pasada</th><th>Recuadro</th><th>Tiempo</th><th>Intentos</th></tr></thead>
+          <tbody id="scanReadHistory"></tbody>
+        </table>
+      </div>
+    </details>
+    <p class="scan-hint">El escáner lee <b>solo dentro del cuadro</b> y gira la imagen para tomar los códigos verticales. Acercá el producto hasta que el código entre completo en el cuadro.</p>
+  </div>
+</div>
+
+<!-- Datos del ultimo escaneo, para precargar el alta de un producto desconocido -->
+<div class="visually-hidden" aria-hidden="true">
+  <input id="newFromBarcodeName" type="text" tabindex="-1">
+  <input id="newFromBarcodePrice" type="number" tabindex="-1">
+</div>
+
+<script src="assets/vendor/zxing.min.js"></script>
 <script src="app.js"></script>
+<script src="scanner.js"></script>
 </body>
 </html>

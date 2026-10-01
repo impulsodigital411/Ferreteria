@@ -1,7 +1,7 @@
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
-const STORAGE_KEY = "impulso_ferreteria_demo_v04";
+const STORAGE_KEY = "impulso_ferreteria_demo_v05";
 
 function seedState(){
   const data = {
@@ -14,17 +14,17 @@ function seedState(){
       {id:6,name:"Adhesivos",description:"Selladores, siliconas y adhesivos",status:"Activo"}
     ],
     products:[
-      {id:1,code:"FER-001",name:"Martillo carpintero 16 oz",category:"Herramientas",unit:"unidad",cost:14500,price:19500,stock:8,min:5,status:"Activo"},
-      {id:2,code:"FER-002",name:"Cinta aisladora negra 20 m",category:"Electricidad",unit:"unidad",cost:1050,price:1800,stock:24,min:10,status:"Activo"},
-      {id:3,code:"FER-003",name:"Tornillo autoperforante 8x1",category:"Tornillería",unit:"unidad",cost:55,price:100,stock:120,min:150,status:"Activo"},
-      {id:4,code:"FER-004",name:"Cable unipolar 2,5 mm",category:"Electricidad",unit:"metro",cost:820,price:1200,stock:68,min:40,status:"Activo"},
-      {id:5,code:"FER-005",name:"Llave de paso 1/2",category:"Plomería",unit:"unidad",cost:4100,price:5900,stock:3,min:6,status:"Activo"},
-      {id:6,code:"FER-006",name:"Disco de corte 115 mm",category:"Herramientas",unit:"unidad",cost:1850,price:2800,stock:18,min:8,status:"Activo"},
-      {id:7,code:"FER-007",name:"Silicona transparente 280 ml",category:"Adhesivos",unit:"unidad",cost:3250,price:4700,stock:5,min:5,status:"Activo"},
-      {id:8,code:"FER-008",name:"Rodillo antigota 22 cm",category:"Pinturería",unit:"unidad",cost:5800,price:7900,stock:11,min:4,status:"Activo"},
-      {id:9,code:"FER-009",name:"Caño PVC 40 mm x 4 m",category:"Plomería",unit:"unidad",cost:9100,price:12900,stock:7,min:6,status:"Activo"},
-      {id:10,code:"FER-010",name:"Mecha widia 8 mm",category:"Herramientas",unit:"unidad",cost:3600,price:5200,stock:0,min:4,status:"Activo"},
-      {id:11,code:"FER-011",name:"Látex interior blanco 20 L",category:"Pinturería",unit:"balde",cost:68500,price:89900,stock:6,min:3,status:"Activo"}
+      {id:1,code:"FER-001",barcode:"7791000000017",name:"Martillo carpintero 16 oz",category:"Herramientas",unit:"unidad",cost:14500,price:19500,stock:8,min:5,status:"Activo"},
+      {id:2,code:"FER-002",barcode:"7791000000024",name:"Cinta aisladora negra 20 m",category:"Electricidad",unit:"unidad",cost:1050,price:1800,stock:24,min:10,status:"Activo"},
+      {id:3,code:"FER-003",barcode:"7791000000031",name:"Tornillo autoperforante 8x1",category:"Tornillería",unit:"unidad",cost:55,price:100,stock:120,min:150,status:"Activo"},
+      {id:4,code:"FER-004",barcode:"7791000000048",name:"Cable unipolar 2,5 mm",category:"Electricidad",unit:"metro",cost:820,price:1200,stock:68,min:40,status:"Activo"},
+      {id:5,code:"FER-005",barcode:"7791000000055",name:"Llave de paso 1/2",category:"Plomería",unit:"unidad",cost:4100,price:5900,stock:3,min:6,status:"Activo"},
+      {id:6,code:"FER-006",barcode:"7791000000062",name:"Disco de corte 115 mm",category:"Herramientas",unit:"unidad",cost:1850,price:2800,stock:18,min:8,status:"Activo"},
+      {id:7,code:"FER-007",barcode:"7791000000079",name:"Silicona transparente 280 ml",category:"Adhesivos",unit:"unidad",cost:3250,price:4700,stock:5,min:5,status:"Activo"},
+      {id:8,code:"FER-008",barcode:"7791000000086",name:"Rodillo antigota 22 cm",category:"Pinturería",unit:"unidad",cost:5800,price:7900,stock:11,min:4,status:"Activo"},
+      {id:9,code:"FER-009",barcode:"7791000000093",name:"Caño PVC 40 mm x 4 m",category:"Plomería",unit:"unidad",cost:9100,price:12900,stock:7,min:6,status:"Activo"},
+      {id:10,code:"FER-010",barcode:"7791000000109",name:"Mecha widia 8 mm",category:"Herramientas",unit:"unidad",cost:3600,price:5200,stock:0,min:4,status:"Activo"},
+      {id:11,code:"FER-011",barcode:"7791000000116",name:"Látex interior blanco 20 L",category:"Pinturería",unit:"balde",cost:68500,price:89900,stock:6,min:3,status:"Activo"}
     ],
     sales:[
       {id:"V-00154",date:"2026-10-01",time:"09:18",items:[{pid:4,code:"FER-004",name:"Cable unipolar 2,5 mm",qty:12,price:1200},{pid:2,code:"FER-002",name:"Cinta aisladora negra 20 m",qty:2,price:1800}],subtotal:18000,discount:0,total:18000,method:"Efectivo",seller:"Vendedor",status:"Vigente"},
@@ -40,8 +40,8 @@ function seedState(){
        {id:1,date:"2026-09-30",time:"12:00",concept:"Flete de mercadería",origin:"Manual",type:"Egreso",amount:13500,method:"Efectivo",user:"Ariel",status:"Vigente",linked:null}
      ],
      users:[
-       {id:1,name:"Ariel",username:"admin",password:"admin123",role:"Administrador",status:"Activo",last:"Sin acceso"},
-       {id:2,name:"Vendedor Mostrador",username:"vendedor",password:"vendedor123",role:"Vendedor",status:"Activo",last:"Sin acceso"}
+      {id:1,name:"Ariel",username:"admin",password:"xjbhoeyp8k",role:"Administrador",status:"Activo",last:"Sin acceso"},
+      {id:2,name:"Vendedor Mostrador",username:"vendedor",password:"1fmab8n5ow",role:"Vendedor",status:"Activo",last:"Sin acceso"}
     ],
     employees:[
       {id:1,name:"Lucas Pérez",dni:"38.111.220",sector:"Mostrador",position:"Vendedor",phone:"264 555-1201",status:"Activo"},
@@ -67,7 +67,7 @@ let state = loadState();
 let currentUser = null;
 let cart = [];
 
-function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(!s)return seedState();const data=JSON.parse(s);data.users.forEach(u=>u.password??=({admin:"admin123",vendedor:"vendedor123"}[u.username]||"demo123"));if(data.attendance.some(a=>a.type)){
+function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(!s)return seedState();const data=JSON.parse(s);data.users.forEach(u=>u.password??=({admin:"xjbhoeyp8k",vendedor:"1fmab8n5ow"}[u.username]||"demo123"));if(data.attendance.some(a=>a.type)){
   const sessions=[];[...data.attendance].reverse().forEach(a=>{if(a.type==="Entrada")sessions.push({id:a.id,date:a.date,entry:a.time,exit:null,employeeId:a.employeeId,employee:a.employee,sector:a.sector,status:a.status==="Anulado"?"Anulada":"En curso",method:a.method});else{const open=sessions.find(x=>x.employeeId===a.employeeId&&x.status==="En curso");if(open){open.exit=a.time;open.status="Finalizada"}}});data.attendance=sessions.reverse();
 }return data}catch(e){return seedState()}}
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
@@ -144,11 +144,11 @@ function renderPosResults(){
   fillCategorySelects();
   const q=$("#posSearch").value.toLowerCase().trim(),cat=$("#posCategory").value;
   if(!q&&!cat){$("#posResults").innerHTML='<div class="empty-state">Busque un producto por código o nombre.</div>';return}
-  const matches=activeProducts().filter(p=>`${p.code} ${p.name}`.toLowerCase().includes(q)&&(!cat||p.category===cat));
+  const matches=activeProducts().filter(p=>`${p.code} ${p.name} ${p.barcode||""}`.toLowerCase().includes(q)&&(!cat||p.category===cat));
   const rows=matches.slice(0,30);
   $("#posResults").innerHTML=rows.map(p=>`
     <div class="product-result">
-      <div><h4>${esc(p.name)}</h4><p>Código: ${esc(p.code)} · ${esc(p.category)} · Stock: ${p.stock} ${esc(p.unit)}</p></div>
+      <div><h4>${esc(p.name)}</h4><p>Código: ${esc(p.code)}${p.barcode?` · Barcode: ${esc(p.barcode)}`:""} · ${esc(p.category)} · Stock: ${p.stock} ${esc(p.unit)}</p></div>
       <div class="price"><small>Precio</small><strong>${money(p.price)}</strong></div>
       <button type="button" class="btn ${p.stock>0?"secondary":"light"} small" ${p.stock<=0?"disabled":""} onclick="addToCart(${p.id})">${p.stock>0?"Agregar":"Sin stock"}</button>
     </div>`).join("")+(matches.length>30?'<p class="form-help">Mostrando 30 resultados. Refiná la búsqueda para encontrar otros productos.</p>':"")||'<div class="empty-state">No se encontraron productos.</div>';
@@ -156,6 +156,7 @@ function renderPosResults(){
 function openNewSale(){
   if(!currentUser)return;
   cart=[];$("#posSearch").value="";$("#posCategory").value="";
+  $("#lastScannedCode").textContent="—";$("#lastScannedBox")?.classList.add("hidden");
   $("#saleAdjustment").value="none";$("#saleAdjustmentMode").value="percent";$("#saleAdjustmentValue").value="0";
   $("#cartMethod").value="Efectivo";["mixedCash","mixedTransfer","mixedCard"].forEach(id=>$("#"+id).value="0");
   $("#saleProductPicker").classList.remove("hidden");$("#showProductPicker").setAttribute("aria-expanded","true");
@@ -329,7 +330,7 @@ function renderProducts(){
   fillCategorySelects();
   const q=$("#productSearch").value.toLowerCase(),cat=$("#categoryFilter").value,sf=$("#stockFilter").value,st=$("#productStatusFilter").value;
   const rows=state.products.filter(p=>{
-    const match=(`${p.code} ${p.name} ${p.category}`).toLowerCase().includes(q);
+    const match=(`${p.code} ${p.name} ${p.category} ${p.barcode||""}`).toLowerCase().includes(q);
     const stockOk=!sf||(sf==="low"&&p.stock<=p.min&&p.stock>0)||(sf==="ok"&&p.stock>p.min)||(sf==="zero"&&p.stock<=0);
     return match&&(!cat||p.category===cat)&&stockOk&&(!st||p.status===st);
   });
@@ -339,12 +340,24 @@ function renderProducts(){
      <td><div class="action-row"><button class="table-btn" onclick="detailProduct(${p.id})">Ver</button>${isAdmin()?`<button class="table-btn" onclick="editProduct(${p.id})">Editar</button><button class="table-btn" onclick="toggleProduct(${p.id})">${p.status==="Activo"?"Desactivar":"Activar"}</button>`:""}</div></td>
    </tr>`).join("");
 }
-window.detailProduct=id=>{const p=state.products.find(x=>x.id===id);detail(`Producto ${p.code}`,`<p>${esc(p.name)} · ${esc(p.category)} · ${esc(p.unit)}</p><p>Venta: ${money(p.price)}${isAdmin()?` · Costo: ${money(p.cost)}`:""}</p><p>Stock: ${p.stock} · Mínimo: ${p.min} · ${p.status}</p>`)};
+window.detailProduct=id=>{const p=state.products.find(x=>x.id===id);detail(`Producto ${p.code}`,`<p>${esc(p.name)} · ${esc(p.category)} · ${esc(p.unit)}</p><p>Venta: ${money(p.price)}${isAdmin()?` · Costo: ${money(p.cost)}`:""}</p>${p.barcode?`<p>Barcode: ${esc(p.barcode)}</p>`:""}<p>Stock: ${p.stock} · Mínimo: ${p.min} · ${p.status}</p>`)};
+function barcodeField(p={}){
+  const value=esc(p.barcode||"");
+  return `<div class="span-2 barcode-field">
+    <label for="barcodeInput">Código de barras</label>
+    <div class="barcode-row">
+      <input id="barcodeInput" name="barcode" inputmode="numeric" pattern="[0-9]*" maxlength="13" value="${value}" placeholder="7791000000017" autocomplete="off">
+      <button type="button" class="btn scan-btn" data-scan-for="barcode">${ZXING_AVAILABLE?"Escanear con la cámara":"Escáner no disponible"}</button>
+    </div>
+    <small class="form-help">Opcional. Entre 8 y 13 dígitos. Podés escribirlo a mano o escanearlo: el escáner solo traduce las barras al número, no busca productos.</small>
+  </div>`;
+}
 function productFields(p={}){
    const cats=activeCategories().map(c=>`<option ${p.category===c.name?"selected":""}>${esc(c.name)}</option>`).join("");
   return `<div class="form-grid">
      <div><label>Código</label><input name="code" required value="${esc(p.code)}"></div>
      <div><label>Nombre del producto</label><input name="name" required value="${esc(p.name)}"></div>
+     ${barcodeField(p)}
      <div><label>Categoría</label><select name="category">${cats}${p.category&&!activeCategories().some(c=>c.name===p.category)?`<option selected>${esc(p.category)}</option>`:""}</select></div>
     <div><label>Unidad</label><select name="unit">${["unidad","metro","kilo","caja","rollo","bolsa","balde"].map(x=>`<option ${p.unit===x?"selected":""}>${x}</option>`).join("")}</select></div>
     <div><label>Costo</label><input name="cost" type="number" min="0" required value="${p.cost||0}"></div>
@@ -353,7 +366,14 @@ function productFields(p={}){
      <div><label>Stock mínimo</label><input name="min" type="number" min="0" step=".01" required value="${p.min??0}"></div>
   </div>`;
 }
-function productData(fd,id){const code=fd.get("code").trim(),name=fd.get("name").trim(),stock=+fd.get("stock"),min=+fd.get("min"),cost=+fd.get("cost"),price=+fd.get("price");if(!code||!name)return fail("Completá código y nombre");if(state.products.some(p=>p.id!==id&&p.code.toLowerCase()===code.toLowerCase()))return fail("El código ya existe");if(!fd.get("category"))return fail("Seleccioná una categoría activa");if(![stock,min,cost,price].every(n=>validNumber(n)))return fail("Precios y stock no pueden ser negativos");return {code,name,category:fd.get("category"),unit:fd.get("unit"),stock,min,cost,price}}
+function validBarcode(value,id){
+  const code=(value||"").trim();
+  if(!code)return "";
+  if(!/^[0-9]{8,13}$/.test(code))return fail("El código de barras debe tener entre 8 y 13 dígitos");
+  if(state.products.some(p=>p.id!==id&&p.barcode===code))return fail("Ese código de barras ya está asignado a otro producto");
+  return code;
+}
+function productData(fd,id){const code=fd.get("code").trim(),name=fd.get("name").trim(),stock=+fd.get("stock"),min=+fd.get("min"),cost=+fd.get("cost"),price=+fd.get("price");if(!code||!name)return fail("Completá código y nombre");if(state.products.some(p=>p.id!==id&&p.code.toLowerCase()===code.toLowerCase()))return fail("El código ya existe");if(!fd.get("category"))return fail("Seleccioná una categoría activa");if(![stock,min,cost,price].every(n=>validNumber(n)))return fail("Precios y stock no pueden ser negativos");const barcode=validBarcode(fd.get("barcode"),id);if(barcode===false)return false;return {code,name,barcode,category:fd.get("category"),unit:fd.get("unit"),stock,min,cost,price}}
 function recordAdjustment(p,delta,reason){if(!delta)return;state.moves.unshift({id:nextId(state.moves),...stamp(),productId:p.id,product:p.name,type:"Ajuste",qty:delta,reason,user:currentUser.name,status:"Vigente",linked:null})}
 function addProduct(){if(!isAdmin())return;openModal("Nuevo producto",productFields(),fd=>{const data=productData(fd);if(!data)return false;const p={id:nextId(state.products),...data,status:"Activo"};state.products.unshift(p);recordAdjustment(p,p.stock,"Stock inicial del producto");return true})}
 window.editProduct=id=>{if(!isAdmin())return;const p=state.products.find(x=>x.id===id);openModal("Editar producto",productFields(p),fd=>{const data=productData(fd,id);if(!data)return false;const delta=data.stock-p.stock;Object.assign(p,data);recordAdjustment(p,delta,"Corrección de stock en ficha de producto");return true})}
@@ -569,6 +589,29 @@ function renderAll(){fillCategorySelects();renderPosResults();renderCart();rende
 $("#loginForm").addEventListener("submit",e=>{e.preventDefault();const ok=login($("#username").value.trim(),$("#password").value);$("#loginError").textContent=ok?"":"Usuario o contraseña incorrectos."});
 $$(".demo-user").forEach(b=>b.addEventListener("click",()=>{$("#username").value=b.dataset.user;$("#password").value=b.dataset.pass}));
 $("#logoutBtn").addEventListener("click",logout);
+
+/* Menu lateral en pantallas chicas: cajon deslizante con overlay.
+ * En escritorio el menu siempre esta visible, asi que todo esto es no-op. */
+const MOBILE_NAV=window.matchMedia("(max-width:780px)");
+function setMenu(open){
+  $("#appView").classList.toggle("menu-open",open);
+  $("#menuOverlay").hidden=!open;
+  document.body.classList.toggle("menu-locked",open&&MOBILE_NAV.matches);
+  $("#menuToggle")?.setAttribute("aria-expanded",String(open));
+  if(open)$("#menuClose")?.focus();
+}
+$("#menuToggle").addEventListener("click",()=>setMenu(true));
+$("#menuClose").addEventListener("click",()=>setMenu(false));
+$("#menuOverlay").addEventListener("click",()=>setMenu(false));
+// Al navegar en movil se cierra el cajon.
+$("#sidebar").addEventListener("click",e=>{if(e.target.closest(".nav-item,.nav-subitem,.nav-group-toggle")&&MOBILE_NAV.matches)setMenu(false)});
+// Escape cierra el menu si esta abierto. El cierre de scanner, modal y venta
+// lo maneja un unico listener mas abajo, asi no se pisan entre si.
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&$("#appView").classList.contains("menu-open"))setMenu(false);
+});
+// Si pasamos a escritorio, el estado del cajon no debe quedar pegado.
+MOBILE_NAV.addEventListener("change",e=>{if(!e.matches)setMenu(false)});
 $$(".nav-item, .nav-subitem").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.section)));
 $$(".nav-group-toggle").forEach(b=>b.addEventListener("click",()=>{const menu=$("#"+b.dataset.group);const open=menu.classList.toggle("open");b.setAttribute("aria-expanded",String(open));}));
 $$("[data-go]").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.go)));
@@ -578,8 +621,13 @@ $("#posSearch").addEventListener("input",renderPosResults);$("#posCategory").add
 $("#newSaleBtn").addEventListener("click",openNewSale);
 $("#closeSaleBtn").addEventListener("click",closeSale);$("#cancelSaleBtn").addEventListener("click",closeSale);
 $("#saleModal").addEventListener("click",e=>{if(e.target.id==="saleModal")closeSale()});
-document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(!$("#modal").classList.contains("hidden"))closeModal();else if(!$("#saleModal").classList.contains("hidden"))closeSale()});
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(!$("#scanner")?.classList.contains("hidden")){e.preventDefault();return closeScanner()}if(!$("#modal").classList.contains("hidden"))closeModal();else if(!$("#saleModal").classList.contains("hidden"))closeSale()});
 $("#showProductPicker").addEventListener("click",()=>{$("#saleProductPicker").classList.remove("hidden");$("#showProductPicker").setAttribute("aria-expanded","true");$("#posSearch").focus()});
+$("#scanProductBtn").addEventListener("click",()=>window.scanProduct());
+$("#scanCodeOnlyBtn").addEventListener("click",()=>window.scanCodeOnly());
+$("#closeScanner").addEventListener("click",closeScanner);
+$("#scanner").addEventListener("click",e=>{if(e.target.id==="scanner")closeScanner()});
+document.addEventListener("click",e=>{const trigger=e.target.closest("[data-scan-for]");if(!trigger)return;e.preventDefault();window.scanIntoField(trigger.dataset.scanFor)});
 $("#saleAdjustment").addEventListener("change",updateSaleControls);
 $("#saleAdjustmentMode").addEventListener("change",renderCart);$("#saleAdjustmentValue").addEventListener("input",renderCart);
 $("#cartMethod").addEventListener("change",updateSaleControls);
