@@ -66,6 +66,32 @@ function seedState(){
 let state = loadState();
 let currentUser = null;
 let cart = [];
+const overlayTriggers=new WeakMap();
+let overlayScrollY=0;
+
+function rememberOverlayFocus(overlay){overlayTriggers.set(overlay,document.activeElement)}
+function restoreOverlayFocus(overlay){
+  const trigger=overlayTriggers.get(overlay);
+  overlayTriggers.delete(overlay);
+  if(!currentUser)return;
+  if(trigger?.isConnected&&trigger.getClientRects().length){trigger.focus({preventScroll:true});return}
+  const top=["scanner","kiosk","modal","saleModal"].find(id=>!$("#"+id).classList.contains("hidden"));
+  const fallback=top?$("#"+top+" button"):$("#pageTitle");
+  if(fallback?.id==="pageTitle")fallback.tabIndex=-1;
+  fallback?.focus({preventScroll:true});
+}
+function syncOverlayScroll(){
+  const open=["saleModal","modal","kiosk","scanner"].some(id=>!$("#"+id).classList.contains("hidden"));
+  if(open&&!document.body.classList.contains("overlay-locked")){
+    overlayScrollY=window.scrollY;
+    document.body.style.top=`-${overlayScrollY}px`;
+    document.body.classList.add("overlay-locked");
+  }else if(!open&&document.body.classList.contains("overlay-locked")){
+    document.body.classList.remove("overlay-locked");
+    document.body.style.top="";
+    window.scrollTo(0,overlayScrollY);
+  }
+}
 
 function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(!s)return seedState();const data=JSON.parse(s);data.users.forEach(u=>u.password??=({admin:"xjbhoeyp8k",vendedor:"1fmab8n5ow"}[u.username]||"demo123"));if(data.attendance.some(a=>a.type)){
   const sessions=[];[...data.attendance].reverse().forEach(a=>{if(a.type==="Entrada")sessions.push({id:a.id,date:a.date,entry:a.time,exit:null,employeeId:a.employeeId,employee:a.employee,sector:a.sector,status:a.status==="Anulado"?"Anulada":"En curso",method:a.method});else{const open=sessions.find(x=>x.employeeId===a.employeeId&&x.status==="En curso");if(open){open.exit=a.time;open.status="Finalizada"}}});data.attendance=sessions.reverse();
@@ -102,13 +128,18 @@ function login(user,pass){
   $("#sidebarUser").textContent=a.name;$("#sidebarRole").textContent=a.role;
   showSection("ventas");renderAll();return true;
 }
-function logout(){currentUser=null;cart=[];$("#saleModal").classList.add("hidden");$("#appView").classList.add("hidden");$("#loginView").classList.remove("hidden");$("#loginForm").reset()}
+function logout(){
+  if(!$("#scanner").classList.contains("hidden"))window.closeScanner();
+  closeModal();closeKiosk();closeSale(true);setMenu(false);
+  currentUser=null;$("#appView").classList.add("hidden");$("#loginView").classList.remove("hidden");$("#loginForm").reset();$("#username").focus();
+}
 function applyRole(){
   $$(".admin-only").forEach(el=>el.classList.toggle("hidden",!isAdmin()));
   if(!isAdmin()&&["dashboard","categorias","movimientos","compras","contabilidad","reportes","empleados","asistencias","usuarios"].includes($(".section.active")?.id||""))showSection("ventas");
 }
 function showSection(id){
   if(!currentUser||(!isAdmin()&&!(["ventas","inventario"].includes(id))))return;
+  if(!$("#scanner").classList.contains("hidden"))window.closeScanner?.();
   $$(".section").forEach(s=>s.classList.toggle("active",s.id===id));
   $$(".nav-item, .nav-subitem").forEach(n=>n.classList.toggle("active",n.dataset.section===id));
   const nav = document.querySelector(`[data-section="${id}"]`);
@@ -155,15 +186,22 @@ function renderPosResults(){
 }
 function openNewSale(){
   if(!currentUser)return;
+  rememberOverlayFocus($("#saleModal"));
   cart=[];$("#posSearch").value="";$("#posCategory").value="";
   $("#lastScannedCode").textContent="—";$("#lastScannedBox")?.classList.add("hidden");
   $("#saleAdjustment").value="none";$("#saleAdjustmentMode").value="percent";$("#saleAdjustmentValue").value="0";
   $("#cartMethod").value="Efectivo";["mixedCash","mixedTransfer","mixedCard"].forEach(id=>$("#"+id).value="0");
   $("#saleProductPicker").classList.remove("hidden");$("#showProductPicker").setAttribute("aria-expanded","true");
-  $("#saleError").textContent="";$("#saleModal").classList.remove("hidden");
-  updateSaleControls();renderCart();renderPosResults();$("#posSearch").focus();
+  $("#saleError").textContent="";$("#saleModal").classList.remove("hidden");syncOverlayScroll();
+  $(".sale-dialog-body").scrollTop=0;
+  updateSaleControls();renderCart();renderPosResults();$("#posSearch").focus({preventScroll:true});
 }
-function closeSale(){cart=[];$("#saleModal").classList.add("hidden");$("#saleError").textContent="";$("#newSaleBtn").focus()}
+function closeSale(force=false){
+  if($("#saleModal").classList.contains("hidden"))return;
+  if(!force&&cart.length&&!confirm("¿Descartar la venta actual?"))return;
+  cart=[];$("#saleModal").classList.add("hidden");$("#saleError").textContent="";
+  syncOverlayScroll();restoreOverlayFocus($("#saleModal"));
+}
 window.addToCart=id=>{
   if($("#saleModal").classList.contains("hidden"))return;
   const p=state.products.find(x=>x.id===id&&x.status==="Activo");if(!p||p.stock<=0)return fail("Producto sin stock disponible");
@@ -255,7 +293,7 @@ function confirmSale(){
     state.moves.unshift({id:nextId(state.moves),...ts,productId:p.id,product:p.name,type:"Salida",qty:-x.qty,reason:`Venta ${id}`,user:currentUser.name,status:"Vigente",linked:id});
   });
   state.accounting.unshift({id:nextId(state.accounting),...ts,concept:`Venta ${id}`,origin:"Venta",type:"Ingreso",amount:total,method,payments,user:currentUser.name,status:"Vigente",linked:id});
-  save();closeSale();renderAll();notify(`Venta ${id} registrada`);
+  save();closeSale(true);renderAll();notify(`Venta ${id} registrada`);
 }
 function saleDetail(s,preview=false){
   const payments=s.payments||{[s.method]:s.total};
@@ -304,7 +342,7 @@ window.editSale=id=>{
       const a=state.accounting.find(x=>x.linked===id&&x.status==="Vigente");if(a)Object.assign(a,{amount:s.total,method,payments:s.payments});return true;
     });
   const form=$("#modalForm");function refresh(){const type=form.elements.adjustType.value;form.elements.adjustMode.disabled=type==="none";form.elements.adjustValue.disabled=type==="none";$("#editSaleMixed").classList.toggle("hidden",form.elements.method.value!=="Mixto");const values=saleAmounts(s.items,{type,mode:form.elements.adjustMode.value,value:form.elements.adjustValue.value});$("#editSaleTotal").textContent=`Nuevo total: ${money(values.total)}${values.error?` · ${values.error}`:""}`}
-  form.addEventListener("change",refresh);form.addEventListener("input",refresh);refresh();
+  form.onchange=refresh;form.oninput=refresh;refresh();
 };
 
 /* Dashboard */
@@ -439,7 +477,7 @@ function purchaseEditor(p){if(!activeProducts().length)return fail("Creá un pro
    for(const [pid,qty] of delta){const product=state.products.find(x=>x.id===pid);product.stock+=qty}
    for(const i of items){const product=state.products.find(x=>x.id===i.pid);const prior=old.find(o=>o.pid===i.pid);i.previousCost=prior?.previousCost??product.cost;product.cost=i.cost;state.moves.unshift({id:nextId(state.moves),...ts,productId:i.pid,product:i.name,type:"Entrada",qty:i.qty,reason:`Compra ${id}`,user:currentUser.name,status:"Vigente",linked:id})}
    let a=state.accounting.find(x=>x.linked===id&&x.status==="Vigente");if(a){a.amount=total;a.method=p.method}else state.accounting.unshift({id:nextId(state.accounting),...ts,concept:`Compra ${id}`,origin:"Compra",type:"Egreso",amount:total,method:p.method,user:currentUser.name,status:"Vigente",linked:id});return true
- });$("#modal .modal-card").classList.add("wide");$("#modalForm").addEventListener("click",e=>{if(e.target.id==="addPurchaseLine")$("#purchaseLines").insertAdjacentHTML("beforeend",purchaseLine());if(e.target.classList.contains("remove-line")){e.target.closest(".purchase-line").remove();recalcPurchase()}});$("#modalForm").addEventListener("input",recalcPurchase);$("#modalForm").addEventListener("change",e=>{if(e.target.classList.contains("line-product")){const product=state.products.find(x=>x.id===+e.target.value);e.target.closest(".purchase-line").querySelector(".line-cost").value=product.cost}recalcPurchase()});recalcPurchase()}
+  });$("#modal .modal-card").classList.add("wide");$("#modalForm").onclick=e=>{if(e.target.id==="addPurchaseLine")$("#purchaseLines").insertAdjacentHTML("beforeend",purchaseLine());if(e.target.classList.contains("remove-line")){e.target.closest(".purchase-line").remove();recalcPurchase()}};$("#modalForm").oninput=recalcPurchase;$("#modalForm").onchange=e=>{if(e.target.classList.contains("line-product")){const product=state.products.find(x=>x.id===+e.target.value);e.target.closest(".purchase-line").querySelector(".line-cost").value=product.cost}recalcPurchase()};recalcPurchase()}
 function recalcPurchase(){$$("#purchaseLines .purchase-line").forEach(el=>el.querySelector(".line-subtotal").textContent=money(+el.querySelector(".line-qty").value*+el.querySelector(".line-cost").value));$("#purchaseTotal").textContent=money($$("#purchaseLines .purchase-line").reduce((s,el)=>s+(+el.querySelector(".line-qty").value*+el.querySelector(".line-cost").value),0))}
 function addPurchase(){purchaseEditor()}
 window.editPurchase=id=>{if(!isAdmin())return;const p=state.purchases.find(x=>x.id===id);if(p?.status==="Vigente"&&p.items?.length)purchaseEditor(p);else fail("Esta compra anterior no tiene productos asociados; solo puede consultarse o anularse")};
@@ -531,7 +569,23 @@ function renderAttendance(){
    $("#attendanceSummary").innerHTML=`<table><thead><tr><th>Empleado</th><th>Horas hoy</th><th>Horas en período</th><th>Asistencias</th><th>Sesiones abiertas</th></tr></thead><tbody>${state.employees.map(e=>{const sessions=valid.filter(a=>a.employeeId===e.id&&(!from||a.date>=from)&&(!to||a.date<=to));return `<tr><td>${esc(e.name)}</td><td>${hours(sessions.filter(a=>a.date===today()).reduce((s,a)=>s+duration(a),0))}</td><td>${hours(sessions.reduce((s,a)=>s+duration(a),0))}</td><td>${sessions.length}</td><td>${sessions.filter(a=>a.status==="En curso").length}</td></tr>`}).join("")}</tbody></table>`;
 }
 function updateClock(){const d=new Date();$("#kioskClock").textContent=d.toLocaleTimeString("es-AR");$("#kioskDate").textContent=d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
-function addAttendance(){if(!isAdmin())return;$("#fingerEmployee").innerHTML=state.employees.filter(e=>e.status==="Activo").map(e=>`<option value="${e.id}">${esc(e.name)} · ${esc(e.sector)}</option>`).join("");$("#readerStatus").textContent="Lector listo";$("#kioskResult").classList.add("hidden");$("#kiosk").classList.remove("hidden");updateClock()}
+let kioskClockTimer=null;
+function addAttendance(){
+  if(!isAdmin())return;
+  rememberOverlayFocus($("#kiosk"));
+  $("#fingerEmployee").innerHTML=state.employees.filter(e=>e.status==="Activo").map(e=>`<option value="${e.id}">${esc(e.name)} · ${esc(e.sector)}</option>`).join("");
+  $("#readerStatus").textContent="Lector listo";$("#kioskResult").classList.add("hidden");$("#kioskResult").classList.remove("good");
+  $("#kiosk").classList.remove("hidden");syncOverlayScroll();$(".kiosk-card").scrollTop=0;updateClock();
+  if(kioskClockTimer)clearInterval(kioskClockTimer);
+  kioskClockTimer=setInterval(updateClock,1000);
+  $("#fingerEmployee").focus({preventScroll:true});
+}
+function closeKiosk(){
+  if(kioskClockTimer){clearInterval(kioskClockTimer);kioskClockTimer=null}
+  if($("#kiosk").classList.contains("hidden"))return;
+  $("#kiosk").classList.add("hidden");$("#kioskResult").classList.add("hidden");
+  syncOverlayScroll();restoreOverlayFocus($("#kiosk"));
+}
 function scanFinger(){const e=state.employees.find(x=>x.id===+$("#fingerEmployee").value&&x.status==="Activo");if(!e)return fail("Seleccioná un empleado activo");const open=state.attendance.find(a=>a.employeeId===e.id&&a.status==="En curso"),ts=stamp();let result;
    if(open){if(new Date(ts.at)<new Date(open.entryAt||`${open.date}T${open.entry}:00`))return fail("La salida debe ser posterior a la entrada");open.exit=ts.time;open.exitAt=ts.at;open.status="Finalizada";result=`<strong>${esc(e.name)}</strong><br>SALIDA REGISTRADA · ${ts.time}<br>Tiempo trabajado: ${hours(duration(open))}`}
    else{state.attendance.unshift({id:nextId(state.attendance),employeeId:e.id,employee:e.name,sector:e.sector,date:ts.date,entry:ts.time,entryAt:ts.at,exit:null,status:"En curso",method:"Huella (demo)"});result=`<strong>${esc(e.name)}</strong><br>ENTRADA REGISTRADA · ${ts.time}`}
@@ -578,11 +632,20 @@ window.toggleUser=id=>{if(!isAdmin())return;if(id===currentUser.id)return fail("
 
 /* Modal and render */
 function openModal(title,html,onSubmit){
-   $("#modal .modal-card").classList.remove("wide");$("#modalTitle").textContent=title;$("#modalForm").innerHTML=html+'<button class="btn primary full" type="submit">Guardar</button>';$("#modal").classList.remove("hidden");
-   $("#modalForm").onsubmit=e=>{e.preventDefault();if(onSubmit(new FormData($("#modalForm")))===false)return;save();closeModal();renderAll();notify("Cambios guardados")};
+   rememberOverlayFocus($("#modal"));
+   const form=$("#modalForm");form.onclick=null;form.oninput=null;form.onchange=null;
+   $("#modal .modal-card").classList.remove("wide");$("#modalTitle").textContent=title;form.innerHTML=html+'<button class="btn primary full" type="submit">Guardar</button>';
+   $("#modal").classList.remove("hidden");syncOverlayScroll();$("#modal .modal-card").scrollTop=0;
+   form.onsubmit=e=>{e.preventDefault();if(onSubmit(new FormData(form))===false)return;save();closeModal();renderAll();if(document.activeElement===document.body||!document.activeElement.getClientRects().length){$("#pageTitle").tabIndex=-1;$("#pageTitle").focus({preventScroll:true})}notify("Cambios guardados")};
+   (form.querySelector("input:not([type=hidden]),select,textarea")||$("#closeModal")).focus({preventScroll:true});
 }
 function detail(title,html){openModal(title,`<div class="detail-box">${html}</div>`,()=>true);$("#modalForm button[type=submit]").remove()}
-function closeModal(){$("#modal").classList.add("hidden")}
+function closeModal(){
+  if($("#modal").classList.contains("hidden"))return;
+  $("#modal").classList.add("hidden");$("#modal .modal-card").classList.remove("wide");
+  const form=$("#modalForm");form.onsubmit=null;form.onclick=null;form.oninput=null;form.onchange=null;form.replaceChildren();
+  syncOverlayScroll();restoreOverlayFocus($("#modal"));
+}
 function renderAll(){fillCategorySelects();renderPosResults();renderCart();renderSales();renderDashboard();renderProducts();renderCategories();renderMoves();renderPurchases();renderAccounting();renderEmployees();renderAttendance();renderReports();renderUsers();applyRole()}
 
 /* Events */
@@ -594,22 +657,23 @@ $("#logoutBtn").addEventListener("click",logout);
  * En escritorio el menu siempre esta visible, asi que todo esto es no-op. */
 const MOBILE_NAV=window.matchMedia("(max-width:780px)");
 function setMenu(open){
+  const wasOpen=$("#appView").classList.contains("menu-open");
   $("#appView").classList.toggle("menu-open",open);
   $("#menuOverlay").hidden=!open;
   document.body.classList.toggle("menu-locked",open&&MOBILE_NAV.matches);
   $("#menuToggle")?.setAttribute("aria-expanded",String(open));
   if(open)$("#menuClose")?.focus();
+  else if(wasOpen&&currentUser){
+    const target=$("#menuToggle").getClientRects().length?$("#menuToggle"):$("#pageTitle");
+    if(target.id==="pageTitle")target.tabIndex=-1;
+    target.focus({preventScroll:true});
+  }
 }
 $("#menuToggle").addEventListener("click",()=>setMenu(true));
 $("#menuClose").addEventListener("click",()=>setMenu(false));
 $("#menuOverlay").addEventListener("click",()=>setMenu(false));
 // Al navegar en movil se cierra el cajon.
 $("#sidebar").addEventListener("click",e=>{if(e.target.closest(".nav-item,.nav-subitem,.nav-group-toggle")&&MOBILE_NAV.matches)setMenu(false)});
-// Escape cierra el menu si esta abierto. El cierre de scanner, modal y venta
-// lo maneja un unico listener mas abajo, asi no se pisan entre si.
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"&&$("#appView").classList.contains("menu-open"))setMenu(false);
-});
 // Si pasamos a escritorio, el estado del cajon no debe quedar pegado.
 MOBILE_NAV.addEventListener("change",e=>{if(!e.matches)setMenu(false)});
 $$(".nav-item, .nav-subitem").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.section)));
@@ -619,14 +683,21 @@ $("#closeModal").addEventListener("click",closeModal);$("#modal").addEventListen
 
 $("#posSearch").addEventListener("input",renderPosResults);$("#posCategory").addEventListener("change",renderPosResults);
 $("#newSaleBtn").addEventListener("click",openNewSale);
-$("#closeSaleBtn").addEventListener("click",closeSale);$("#cancelSaleBtn").addEventListener("click",closeSale);
-$("#saleModal").addEventListener("click",e=>{if(e.target.id==="saleModal")closeSale()});
-document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(!$("#scanner")?.classList.contains("hidden")){e.preventDefault();return closeScanner()}if(!$("#modal").classList.contains("hidden"))closeModal();else if(!$("#saleModal").classList.contains("hidden"))closeSale()});
+$("#closeSaleBtn").addEventListener("click",()=>closeSale());$("#cancelSaleBtn").addEventListener("click",()=>closeSale());
+$("#saleModal").addEventListener("click",e=>{if(e.target===$("#saleModal"))closeSale()});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape")return;
+  if(!$("#scanner").classList.contains("hidden")){e.preventDefault();window.closeScanner()}
+  else if(!$("#kiosk").classList.contains("hidden")){e.preventDefault();closeKiosk()}
+  else if(!$("#modal").classList.contains("hidden")){e.preventDefault();closeModal()}
+  else if(!$("#saleModal").classList.contains("hidden")){e.preventDefault();closeSale()}
+  else if($("#appView").classList.contains("menu-open")){e.preventDefault();setMenu(false)}
+});
 $("#showProductPicker").addEventListener("click",()=>{$("#saleProductPicker").classList.remove("hidden");$("#showProductPicker").setAttribute("aria-expanded","true");$("#posSearch").focus()});
 $("#scanProductBtn").addEventListener("click",()=>window.scanProduct());
 $("#scanCodeOnlyBtn").addEventListener("click",()=>window.scanCodeOnly());
-$("#closeScanner").addEventListener("click",closeScanner);
-$("#scanner").addEventListener("click",e=>{if(e.target.id==="scanner")closeScanner()});
+$("#closeScanner").addEventListener("click",()=>window.closeScanner());
+$("#scanner").addEventListener("click",e=>{if(e.target===$("#scanner"))window.closeScanner()});
 document.addEventListener("click",e=>{const trigger=e.target.closest("[data-scan-for]");if(!trigger)return;e.preventDefault();window.scanIntoField(trigger.dataset.scanFor)});
 $("#saleAdjustment").addEventListener("change",updateSaleControls);
 $("#saleAdjustmentMode").addEventListener("change",renderCart);$("#saleAdjustmentValue").addEventListener("input",renderCart);
@@ -646,9 +717,9 @@ $("#previewSaleBtn").addEventListener("click",previewSale);$("#confirmSaleBtn").
  ["attendanceSearch","attendanceEmployeeFilter","attendanceTypeFilter","attendanceDateFilter","attendanceFrom","attendanceTo","attendanceSectorFilter"].forEach(id=>$("#"+id)?.addEventListener(id==="attendanceSearch"?"input":"change",renderAttendance));
  $("#newEmployeeBtn")?.addEventListener("click",addEmployee);
  $("#newAttendanceBtn")?.addEventListener("click",addAttendance);
- $("#closeKiosk").addEventListener("click",()=>$("#kiosk").classList.add("hidden"));
+ $("#closeKiosk").addEventListener("click",closeKiosk);
+ $("#kiosk").addEventListener("click",e=>{if(e.target===$("#kiosk"))closeKiosk()});
  $("#scanFinger").addEventListener("click",scanFinger);
- setInterval(()=>{if(!$("#kiosk").classList.contains("hidden"))updateClock()},1000);
 $("#newProductBtn").addEventListener("click",addProduct);$("#newCategoryBtn").addEventListener("click",addCategory);$("#newStockMoveBtn").addEventListener("click",addMove);
 $("#newPurchaseBtn").addEventListener("click",addPurchase);$("#newAccountingBtn").addEventListener("click",addAccounting);$("#newUserBtn").addEventListener("click",addUser);
  $("#resetDemo").addEventListener("click",()=>{if(!isAdmin())return;if(confirm("¿Restablecer todos los datos de demostración?")){state=seedState();cart=[];save();if(!state.users.some(u=>u.id===currentUser.id&&u.status==="Activo")){logout()}else{const u=state.users.find(x=>x.id===currentUser.id);currentUser={id:u.id,username:u.username,name:u.name,role:u.role};$("#sidebarUser").textContent=u.name}renderAll();if(currentUser)showSection("ventas");notify("Datos de demostración restablecidos")}});

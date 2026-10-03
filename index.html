@@ -479,7 +479,7 @@
 
 <div id="kiosk" class="kiosk hidden" role="dialog" aria-modal="true" aria-label="Lector de asistencia">
   <div class="kiosk-card">
-    <div class="kiosk-head"><img src="assets/logo-impulso.png" alt="Impulso"><div><span class="eyebrow">IMPULSO · ASISTENCIA</span><h2>Lector de huella</h2></div><button id="closeKiosk" class="icon-btn" aria-label="Cerrar">×</button></div>
+    <div class="kiosk-head"><img src="assets/logo-impulso.png" alt="Impulso"><div><span class="eyebrow">IMPULSO · ASISTENCIA</span><h2>Lector de huella</h2></div><button id="closeKiosk" type="button" class="icon-btn" aria-label="Cerrar lector de asistencia">×</button></div>
     <div class="kiosk-time"><strong id="kioskClock"></strong><span id="kioskDate"></span></div>
     <div class="fingerprint-area"><div class="fingerprint"><div class="fingerprint-mark"></div></div><div><h3 id="readerStatus">Lector listo</h3><p>Esperando lectura de huella. La selección manual de empleado existe solo para esta demo; el lector real lo identificaría automáticamente.</p></div></div>
     <label for="fingerEmployee">Seleccionar empleado para simular lectura</label>
@@ -489,24 +489,24 @@
   </div>
 </div>
 
-<div id="modal" class="modal hidden">
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-card">
     <div class="modal-head">
       <div><span class="eyebrow">IMPULSO · FERRETERÍA</span><h3 id="modalTitle">Registro</h3></div>
-      <button id="closeModal" class="icon-btn">×</button>
+      <button id="closeModal" type="button" class="icon-btn" aria-label="Cerrar formulario">×</button>
     </div>
     <form id="modalForm" class="modal-form"></form>
   </div>
 </div>
 
 <!-- ESCANER DE CODIGOS DE BARRAS -->
-<div id="scanner" class="scanner hidden">
+<div id="scanner" class="scanner hidden" role="dialog" aria-modal="true" aria-label="Escanear código de barras">
   <div class="scanner-card">
     <div class="scanner-head">
-      <div><span class="eyebrow">IMPULSO · LECTURA</span><h3 id="scanTitle">Escanear código</h3></div>
+      <div><span class="eyebrow">IMPULSO · LECTURA</span><h3 id="scanTitle">Escanear código</h3><h3 class="scanner-mobile-title">Escanear código de barras</h3></div>
       <div class="scanner-head-actions">
-        <button type="button" class="btn light small" onclick="switchScanCamera()">Cambiar cámara</button>
-        <button id="closeScanner" type="button" class="icon-btn" aria-label="Cerrar escaner">×</button>
+        <button type="button" class="btn light small" aria-label="Cambiar cámara" onclick="switchScanCamera()"><span class="scanner-camera-label">Cambiar cámara</span><span class="scanner-camera-short">Cámara</span></button>
+        <button id="closeScanner" type="button" class="icon-btn" aria-label="Cerrar escáner">×</button>
       </div>
     </div>
     <div class="scanner-stage">
@@ -514,26 +514,29 @@
       <div id="scanBox" class="scan-box" aria-hidden="true"><span class="scan-box-hint">dentro del cuadro</span></div>
     </div>
     <p id="scanMessage" class="scan-message"></p>
-    <p id="scanDebug" class="scan-debug"></p>
     <p id="scanError" class="scanner-error hidden"></p>
-    <div class="scan-controls">
-      <label>Ancho del cuadro
-        <input id="scanBoxW" type="range" min="15" max="100" value="72" oninput="setScanBox('w',this.value)">
-      </label>
-      <label>Alto del cuadro
-        <input id="scanBoxH" type="range" min="15" max="100" value="72" oninput="setScanBox('h',this.value)">
-      </label>
-      <label>Izquierda / Derecha
-        <input id="scanBoxX" type="range" min="5" max="95" value="50" oninput="setScanBox('cx',this.value)">
-      </label>
-      <label>Arriba / Abajo
-        <input id="scanBoxY" type="range" min="5" max="95" value="50" oninput="setScanBox('cy',this.value)">
-      </label>
-    </div>
-    <div class="scan-actions">
-      <button id="freeScanToggle" type="button" class="btn light small" onclick="toggleFreeScan(this.classList.contains('on')?false:true)">Escaneo libre</button>
-      <button type="button" class="btn light small" onclick="resetScanBox()">Recuadro por defecto</button>
-    </div>
+    <details class="scan-area-settings">
+      <summary>Ajustar área de lectura</summary>
+      <div class="scan-controls">
+        <label>Ancho del cuadro
+          <input id="scanBoxW" type="range" min="15" max="100" value="72" oninput="setScanBox('w',this.value)">
+        </label>
+        <label>Alto del cuadro
+          <input id="scanBoxH" type="range" min="15" max="100" value="72" oninput="setScanBox('h',this.value)">
+        </label>
+        <label>Izquierda / Derecha
+          <input id="scanBoxX" type="range" min="5" max="95" value="50" oninput="setScanBox('cx',this.value)">
+        </label>
+        <label>Arriba / Abajo
+          <input id="scanBoxY" type="range" min="5" max="95" value="50" oninput="setScanBox('cy',this.value)">
+        </label>
+      </div>
+      <div class="scan-actions"><button type="button" class="btn light small" onclick="resetScanBox()">Recuadro por defecto</button></div>
+    </details>
+    <details class="scan-advanced">
+      <summary>Ajustes avanzados</summary>
+      <div class="scan-actions"><button id="freeScanToggle" type="button" class="btn light small" onclick="toggleFreeScan(this.classList.contains('on')?false:true)">Escaneo libre</button></div>
+    </details>
     <details class="scan-history">
       <summary>Lecturas de esta sesión</summary>
       <div class="table-wrap">
@@ -543,7 +546,14 @@
         </table>
       </div>
     </details>
-    <p class="scan-hint">El escáner lee <b>solo dentro del cuadro</b> y gira la imagen para tomar los códigos verticales. Acercá el producto hasta que el código entre completo en el cuadro.</p>
+    <details class="scan-help">
+      <summary>¿Cómo escanear?</summary>
+      <p class="scan-hint">El escáner lee <b>solo dentro del cuadro</b> y gira la imagen para tomar los códigos verticales. Acercá el producto hasta que el código entre completo en el cuadro.</p>
+    </details>
+    <details class="scan-technical">
+      <summary>Información técnica</summary>
+      <p id="scanDebug" class="scan-debug"></p>
+    </details>
   </div>
 </div>
 

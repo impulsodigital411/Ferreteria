@@ -129,6 +129,8 @@ const scanner = {
   hardAttempts: 0,
   pass: 0,
   timer: null,
+  detectTimer: null,
+  generation: 0,
   facing: "environment",
   running: false,
   onDetected: null,
@@ -143,6 +145,7 @@ function scanError(message){
   if(!box)return;
   box.textContent=message;
   box.classList.remove("hidden");
+  setScanMessage("No se pudo leer. Acercá el código e intentá nuevamente.","bad");
 }
 
 function clearScanError(){
@@ -193,26 +196,31 @@ let focusModeOk=false;
 async function startScanner(){
   clearScanError();
   if(!ZXING_AVAILABLE){
-    scanError("No se cargó ZXing. Revisá assets/vendor/zxing.min.js");
+    scanError("No se pudo iniciar el escáner. Actualizá la página e intentá nuevamente.");
     return false;
   }
   if(!barcodeSupported()){
-    scanError(`Este navegador no habilita la cámara en ${location.protocol}//. `+
-      "Entrá por https://192.168.1.33/ferreteria/ (ver README-HTTPS.md).");
+    scanError("La cámara no está disponible. Abrí la página con HTTPS y volvé a intentarlo.");
     return false;
   }
+  let generation;
   try{
     stopScanner();
-    scanner.stream=await navigator.mediaDevices.getUserMedia({
+    generation=scanner.generation;
+    const stream=await navigator.mediaDevices.getUserMedia({
       video:{facingMode:{ideal:scanner.facing},width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:30}},
       audio:false
     });
+    if(generation!==scanner.generation){stream.getTracks().forEach(t=>t.stop());return false}
+    scanner.stream=stream;
     const video=$("#scanVideo");
     video.srcObject=scanner.stream;
     video.setAttribute("playsinline","");
     video.muted=true;
     await video.play();
+    if(generation!==scanner.generation)return false;
     await tuneCamera(scanner.stream);
+    if(generation!==scanner.generation)return false;
     // El canvas es nuestro: ZXing nunca ve el <video>, asi que no puede apagarlo.
     scanner.canvas=document.createElement("canvas");
     scanner.ctx=scanner.canvas.getContext("2d",{willReadFrequently:true});
@@ -229,14 +237,16 @@ async function startScanner(){
     lastPass="";
     scanner.working=false;
     scanner.running=true;
-    setScanMessage("Apuntá el código dentro de la franja.");
+    setScanMessage("Buscando código... acercá el producto al recuadro.");
     scanFrame();
     return true;
   }catch(error){
+    if(generation!==scanner.generation||$("#scanner").classList.contains("hidden"))return false;
+    stopScanner();
     const denied=error && (error.name==="NotAllowedError" || error.name==="SecurityError");
-    scanError(denied?"Permiso de cámara denegado. Habilitalo desde el candado de la barra de direcciones."
+    scanError(denied?"Permití el acceso a la cámara para escanear."
       :error && error.name==="NotFoundError"?"No se encontró ninguna cámara en el dispositivo."
-      :"No se pudo abrir la cámara: "+(error?.message||error));
+      :"No se pudo abrir la cámara. Intentá nuevamente.");
     return false;
   }
 }
@@ -376,9 +386,9 @@ let framesSeen=0;
 let lastErrorText="";
 const SCAN_DEBUG=true;function bandQuality(avg,attempts){
   if(attempts<4)return;
-  if(avg>225)setScanMessage("Mucha luz o reflejo: cambiá el ángulo del producto.");
-  else if(avg<30)setScanMessage("Está muy oscuro: buscá más luz.");
-  else setScanMessage("Buscando código… acercá el producto a la franja.");
+  if(avg>225)setScanMessage("Evitá reflejos y acercá el código al recuadro.");
+  else if(avg<30)setScanMessage("Buscá más luz y acercá el código al recuadro.");
+  else setScanMessage("Buscando código... acercá el producto al recuadro.");
 }
 
 /* Datos crudos del escaner + metricas para calibrar.
@@ -467,6 +477,7 @@ async function scanFrame(){
 }
 
 function stopScanner(){
+  scanner.generation++;
   scanner.running=false;
   scanner.working=false;
   if(scanner.timer){clearTimeout(scanner.timer);scanner.timer=null}
@@ -476,17 +487,26 @@ function stopScanner(){
   scanner.reader=null;
   scanner.canvas=null;
   scanner.ctx=null;
+  scanner.tmp=null;
+  scanner.tctx=null;
 }
 
 window.switchScanCamera=async()=>{
+  if($("#scanner").classList.contains("hidden")||scanner.detectTimer)return;
   scanner.facing=scanner.facing==="environment"?"user":"environment";
   await startScanner();
 };
 
 function openScanner(title="Escanear código"){
   if(!currentUser)return Promise.resolve(false);
+  if(scanner.detectTimer){clearTimeout(scanner.detectTimer);scanner.detectTimer=null}
+  rememberOverlayFocus($("#scanner"));
   $("#scanTitle").textContent=title;
   $("#scanner").classList.remove("hidden");
+  syncOverlayScroll();
+  $(".scan-area-settings").open=!window.matchMedia("(max-width: 780px)").matches;
+  for(const el of document.querySelectorAll(".scan-advanced, .scan-history, .scan-help, .scan-technical"))el.open=false;
+  $(".scanner-card").scrollTop=0;
   clearScanError();
   paintBox();
   syncSliders();
@@ -495,14 +515,17 @@ function openScanner(title="Escanear código"){
   scanner.attempts=0;
   scanner.attemptsAtFirstRead=null;
   lastReadHistory.length=0;
+  $("#scanReadHistory").replaceChildren();
   showReadHistory();
   return startScanner();
 }
 
 function closeScanner(){
+  if(scanner.detectTimer){clearTimeout(scanner.detectTimer);scanner.detectTimer=null}
   scanner.onDetected=null;
   stopScanner();
   $("#scanner").classList.add("hidden");
+  syncOverlayScroll();restoreOverlayFocus($("#scanner"));
   setScanMessage("");
   clearScanError();
 }
@@ -520,15 +543,13 @@ function onBarcodeDetected(code,format,spec){
   if(lastReadHistory.length>12)lastReadHistory.pop();
   showReadHistory();
   // Muestra el numero en pantalla antes de cerrar: confirma que leyo bien.
-  setScanMessage(`Código leído: ${code}  (${name})`,"good");
+  setScanMessage(`Código detectado: ${code}`,"good");
   const detected=code;
   stopScanner();
-  setTimeout(()=>{
-    $("#scanner").classList.add("hidden");
-    setScanMessage("");
-    clearScanError();
-    if(scanner.onDetected)scanner.onDetected(detected,name);
-    scanner.onDetected=null;
+  scanner.detectTimer=setTimeout(()=>{
+    const callback=scanner.onDetected;
+    closeScanner();
+    if(callback)callback(detected,name);
   },900);
 }
 const lastReadHistory=[];
