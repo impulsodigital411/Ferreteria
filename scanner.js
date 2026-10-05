@@ -651,8 +651,7 @@ function askNewProductFromBarcode(code){
       if(!productName)return fail("Ingresá un nombre para el producto");
       if(!validNumber(cost)||!validNumber(sale)||!validNumber(stock)||!validNumber(min))return fail("Revisá los valores numéricos");
       if(state.products.some(p=>p.barcode===code))return fail("Ese código ya fue asignado");
-      const nextNum=String(state.products.length+1).padStart(3,"0");
-      const p={id:nextId(state.products),code:`FER-${nextNum}`,barcode:code,name:productName,
+      const p={id:nextId(state.products),barcode:code,name:productName,
         category:fd.get("category"),unit:fd.get("unit"),cost,price:sale,stock,min,status:"Activo"};
       state.products.unshift(p);
       recordAdjustment(p,stock,`Alta por escaneo de código ${code}`);

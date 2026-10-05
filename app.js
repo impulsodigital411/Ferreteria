@@ -1,7 +1,7 @@
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
-const STORAGE_KEY = "impulso_ferreteria_demo_v05";
+const STORAGE_KEY = "impulso_ferreteria_demo_v06";
 
 function seedState(){
   const data = {
@@ -14,27 +14,27 @@ function seedState(){
       {id:6,name:"Adhesivos",description:"Selladores, siliconas y adhesivos",status:"Activo"}
     ],
     products:[
-      {id:1,code:"FER-001",barcode:"7791000000017",name:"Martillo carpintero 16 oz",category:"Herramientas",unit:"unidad",cost:14500,price:19500,stock:8,min:5,status:"Activo"},
-      {id:2,code:"FER-002",barcode:"7791000000024",name:"Cinta aisladora negra 20 m",category:"Electricidad",unit:"unidad",cost:1050,price:1800,stock:24,min:10,status:"Activo"},
-      {id:3,code:"FER-003",barcode:"7791000000031",name:"Tornillo autoperforante 8x1",category:"Tornillería",unit:"unidad",cost:55,price:100,stock:120,min:150,status:"Activo"},
-      {id:4,code:"FER-004",barcode:"7791000000048",name:"Cable unipolar 2,5 mm",category:"Electricidad",unit:"metro",cost:820,price:1200,stock:68,min:40,status:"Activo"},
-      {id:5,code:"FER-005",barcode:"7791000000055",name:"Llave de paso 1/2",category:"Plomería",unit:"unidad",cost:4100,price:5900,stock:3,min:6,status:"Activo"},
-      {id:6,code:"FER-006",barcode:"7791000000062",name:"Disco de corte 115 mm",category:"Herramientas",unit:"unidad",cost:1850,price:2800,stock:18,min:8,status:"Activo"},
-      {id:7,code:"FER-007",barcode:"7791000000079",name:"Silicona transparente 280 ml",category:"Adhesivos",unit:"unidad",cost:3250,price:4700,stock:5,min:5,status:"Activo"},
-      {id:8,code:"FER-008",barcode:"7791000000086",name:"Rodillo antigota 22 cm",category:"Pinturería",unit:"unidad",cost:5800,price:7900,stock:11,min:4,status:"Activo"},
-      {id:9,code:"FER-009",barcode:"7791000000093",name:"Caño PVC 40 mm x 4 m",category:"Plomería",unit:"unidad",cost:9100,price:12900,stock:7,min:6,status:"Activo"},
-      {id:10,code:"FER-010",barcode:"7791000000109",name:"Mecha widia 8 mm",category:"Herramientas",unit:"unidad",cost:3600,price:5200,stock:0,min:4,status:"Activo"},
-      {id:11,code:"FER-011",barcode:"7791000000116",name:"Látex interior blanco 20 L",category:"Pinturería",unit:"balde",cost:68500,price:89900,stock:6,min:3,status:"Activo"}
+      {id:1,barcode:"7791000000017",name:"Martillo carpintero 16 oz",category:"Herramientas",unit:"unidad",cost:14500,price:19500,stock:8,min:5,status:"Activo"},
+      {id:2,barcode:"7791000000024",name:"Cinta aisladora negra 20 m",category:"Electricidad",unit:"unidad",cost:1050,price:1800,stock:24,min:10,status:"Activo"},
+      {id:3,barcode:"7791000000031",name:"Tornillo autoperforante 8x1",category:"Tornillería",unit:"unidad",cost:55,price:100,stock:120,min:150,status:"Activo"},
+      {id:4,barcode:"7791000000048",name:"Cable unipolar 2,5 mm",category:"Electricidad",unit:"metro",cost:820,price:1200,stock:68,min:40,status:"Activo"},
+      {id:5,barcode:"7791000000055",name:"Llave de paso 1/2",category:"Plomería",unit:"unidad",cost:4100,price:5900,stock:3,min:6,status:"Activo"},
+      {id:6,barcode:"7791000000062",name:"Disco de corte 115 mm",category:"Herramientas",unit:"unidad",cost:1850,price:2800,stock:18,min:8,status:"Activo"},
+      {id:7,barcode:"7791000000079",name:"Silicona transparente 280 ml",category:"Adhesivos",unit:"unidad",cost:3250,price:4700,stock:5,min:5,status:"Activo"},
+      {id:8,barcode:"7791000000086",name:"Rodillo antigota 22 cm",category:"Pinturería",unit:"unidad",cost:5800,price:7900,stock:11,min:4,status:"Activo"},
+      {id:9,barcode:"7791000000093",name:"Caño PVC 40 mm x 4 m",category:"Plomería",unit:"unidad",cost:9100,price:12900,stock:7,min:6,status:"Activo"},
+      {id:10,barcode:"7791000000109",name:"Mecha widia 8 mm",category:"Herramientas",unit:"unidad",cost:3600,price:5200,stock:0,min:4,status:"Activo"},
+      {id:11,barcode:"7791000000116",name:"Látex interior blanco 20 L",category:"Pinturería",unit:"balde",cost:68500,price:89900,stock:6,min:3,status:"Activo"}
     ],
     sales:[
-      {id:"V-00154",date:"2026-10-01",time:"09:18",items:[{pid:4,code:"FER-004",name:"Cable unipolar 2,5 mm",qty:12,price:1200},{pid:2,code:"FER-002",name:"Cinta aisladora negra 20 m",qty:2,price:1800}],subtotal:18000,discount:0,total:18000,method:"Efectivo",seller:"Vendedor",status:"Vigente"},
-      {id:"V-00153",date:"2026-10-01",time:"08:52",items:[{pid:1,code:"FER-001",name:"Martillo carpintero 16 oz",qty:1,price:19500},{pid:6,code:"FER-006",name:"Disco de corte 115 mm",qty:3,price:2800}],subtotal:27900,discount:0,total:27900,method:"Transferencia",seller:"Vendedor",status:"Vigente"},
-      {id:"V-00152",date:"2026-09-30",time:"18:26",items:[{pid:5,code:"FER-005",name:"Llave de paso 1/2",qty:2,price:5900},{pid:9,code:"FER-009",name:"Caño PVC 40 mm x 4 m",qty:4,price:12900}],subtotal:63400,discount:0,total:63400,method:"Transferencia",seller:"Administrador",status:"Vigente"}
+      {id:"V-00154",date:"2026-10-01",time:"09:18",items:[{pid:4,barcode:"7791000000048",name:"Cable unipolar 2,5 mm",qty:12,price:1200},{pid:2,barcode:"7791000000024",name:"Cinta aisladora negra 20 m",qty:2,price:1800}],subtotal:18000,discount:0,total:18000,method:"Efectivo",seller:"Vendedor",status:"Vigente"},
+      {id:"V-00153",date:"2026-10-01",time:"08:52",items:[{pid:1,barcode:"7791000000017",name:"Martillo carpintero 16 oz",qty:1,price:19500},{pid:6,barcode:"7791000000062",name:"Disco de corte 115 mm",qty:3,price:2800}],subtotal:27900,discount:0,total:27900,method:"Transferencia",seller:"Vendedor",status:"Vigente"},
+      {id:"V-00152",date:"2026-09-30",time:"18:26",items:[{pid:5,barcode:"7791000000055",name:"Llave de paso 1/2",qty:2,price:5900},{pid:9,barcode:"7791000000093",name:"Caño PVC 40 mm x 4 m",qty:4,price:12900}],subtotal:63400,discount:0,total:63400,method:"Transferencia",seller:"Administrador",status:"Vigente"}
     ],
      moves:[{id:1,date:"2026-10-01",time:"08:47",productId:3,product:"Tornillo autoperforante 8x1",type:"Ajuste",qty:-15,reason:"Conteo físico",user:"Ariel",status:"Vigente",linked:null}],
      purchases:[
-       {id:"C-00078",date:"2026-10-01",time:"08:47",reference:"Distribuidora Cuyo",items:[{pid:1,code:"FER-001",name:"Martillo carpintero 16 oz",qty:2,cost:14500},{pid:6,code:"FER-006",name:"Disco de corte 115 mm",qty:2,cost:1850}],total:32700,method:"Transferencia",status:"Vigente"},
-       {id:"C-00077",date:"2026-09-30",time:"12:00",reference:"Pinturas del Oeste",items:[{pid:8,code:"FER-008",name:"Rodillo antigota 22 cm",qty:2,cost:5800},{pid:11,code:"FER-011",name:"Látex interior blanco 20 L",qty:1,cost:68500}],total:80100,method:"Transferencia",status:"Vigente"}
+        {id:"C-00078",date:"2026-10-01",time:"08:47",reference:"Distribuidora Cuyo",items:[{pid:1,barcode:"7791000000017",name:"Martillo carpintero 16 oz",qty:2,cost:14500},{pid:6,barcode:"7791000000062",name:"Disco de corte 115 mm",qty:2,cost:1850}],total:32700,method:"Transferencia",status:"Vigente"},
+        {id:"C-00077",date:"2026-09-30",time:"12:00",reference:"Pinturas del Oeste",items:[{pid:8,barcode:"7791000000086",name:"Rodillo antigota 22 cm",qty:2,cost:5800},{pid:11,barcode:"7791000000116",name:"Látex interior blanco 20 L",qty:1,cost:68500}],total:80100,method:"Transferencia",status:"Vigente"}
      ],
      accounting:[
        {id:1,date:"2026-09-30",time:"12:00",concept:"Flete de mercadería",origin:"Manual",type:"Egreso",amount:13500,method:"Efectivo",user:"Ariel",status:"Vigente",linked:null}
@@ -175,11 +175,11 @@ function renderPosResults(){
   fillCategorySelects();
   const q=$("#posSearch").value.toLowerCase().trim(),cat=$("#posCategory").value;
   if(!q&&!cat){$("#posResults").innerHTML='<div class="empty-state">Busque un producto por código o nombre.</div>';return}
-  const matches=activeProducts().filter(p=>`${p.code} ${p.name} ${p.barcode||""}`.toLowerCase().includes(q)&&(!cat||p.category===cat));
+  const matches=activeProducts().filter(p=>`${p.barcode||""} ${p.name}`.toLowerCase().includes(q)&&(!cat||p.category===cat));
   const rows=matches.slice(0,30);
   $("#posResults").innerHTML=rows.map(p=>`
     <div class="product-result">
-      <div><h4>${esc(p.name)}</h4><p>Código: ${esc(p.code)}${p.barcode?` · Barcode: ${esc(p.barcode)}`:""} · ${esc(p.category)} · Stock: ${p.stock} ${esc(p.unit)}</p></div>
+      <div><h4>${esc(p.name)}</h4><p>Código de barras: ${esc(p.barcode||"—")} · ${esc(p.category)} · Stock: ${p.stock} ${esc(p.unit)}</p></div>
       <div class="price"><small>Precio</small><strong>${money(p.price)}</strong></div>
       <button type="button" class="btn ${p.stock>0?"secondary":"light"} small" ${p.stock<=0?"disabled":""} onclick="addToCart(${p.id})">${p.stock>0?"Agregar":"Sin stock"}</button>
     </div>`).join("")+(matches.length>30?'<p class="form-help">Mostrando 30 resultados. Refiná la búsqueda para encontrar otros productos.</p>':"")||'<div class="empty-state">No se encontraron productos.</div>';
@@ -207,7 +207,7 @@ window.addToCart=id=>{
   const p=state.products.find(x=>x.id===id&&x.status==="Activo");if(!p||p.stock<=0)return fail("Producto sin stock disponible");
   const row=cart.find(x=>x.pid===id);
   if(row){if(row.qty+1>p.stock)return fail(`Stock disponible: ${p.stock}`);row.qty=cents(row.qty+1)}
-  else{if(p.stock<1)return fail(`Stock disponible: ${p.stock}`);cart.push({pid:p.id,code:p.code,name:p.name,price:p.price,cost:p.cost,qty:1,discount:0})}
+  else{if(p.stock<1)return fail(`Stock disponible: ${p.stock}`);cart.push({pid:p.id,barcode:p.barcode,name:p.name,price:p.price,cost:p.cost,qty:1,discount:0})}
   $("#saleError").textContent="";renderCart();$("#posSearch").value="";$("#posCategory").value="";renderPosResults();$("#posSearch").focus();
 }
 window.cartQty=(pid,value)=>{
@@ -258,7 +258,7 @@ function updateSaleControls(){
 }
 function renderCart(){
   $("#cartTable").innerHTML=cart.map(x=>`<tr>
-    <td><b>${esc(x.name)}</b><br><small class="muted">${esc(x.code)} · ${esc(state.products.find(p=>p.id===x.pid)?.unit||"")}</small></td>
+    <td><b>${esc(x.name)}</b><br><small class="muted">${esc(x.barcode||"Sin código")} · ${esc(state.products.find(p=>p.id===x.pid)?.unit||"")}</small></td>
     <td><div class="qty-control"><button type="button" class="table-btn" aria-label="Disminuir ${esc(x.name)}" onclick="cartQty(${x.pid},${x.qty-1})">−</button><input type="number" aria-label="Cantidad de ${esc(x.name)}" min="0.01" step="0.01" value="${x.qty}" onchange="cartQty(${x.pid},this.value)"><button type="button" class="table-btn" aria-label="Aumentar ${esc(x.name)}" onclick="cartQty(${x.pid},${x.qty+1})">+</button></div></td>
     <td>${money(x.price)}</td><td><input class="line-discount" type="number" aria-label="Descuento de ${esc(x.name)}" min="0" step="0.01" value="${x.discount||0}" onchange="cartLineDiscount(${x.pid},this.value)"></td>
     <td><b>${money(cents(x.price*x.qty-(x.discount||0)))}</b></td><td><button type="button" class="table-btn" onclick="removeCart(${x.pid})">Quitar</button></td>
@@ -299,7 +299,7 @@ function saleDetail(s,preview=false){
   const payments=s.payments||{[s.method]:s.total};
   return `<div class="detail-box"><strong>${preview?"Vista previa · sin registrar":`Venta Nº ${esc(s.id)}`}</strong>
     <p>Fecha: ${fmtDate(s.date)} · Hora: ${s.time} · Vendedor: ${esc(s.seller)}</p><p>Estado: ${preview?"Borrador":s.status}</p></div>
-    <div class="detail-box"><strong>Productos</strong><div class="table-wrap"><table class="sale-detail-table"><thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Descuento</th><th>Subtotal</th></tr></thead><tbody>${s.items.map(i=>`<tr><td>${esc(i.code)} · ${esc(i.name)}</td><td>${i.qty}</td><td>${money(i.price)}</td><td>${money(i.discount||0)}</td><td>${money(cents(i.price*i.qty-(i.discount||0)))}</td></tr>`).join("")}</tbody></table></div></div>
+    <div class="detail-box"><strong>Productos</strong><div class="table-wrap"><table class="sale-detail-table"><thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Descuento</th><th>Subtotal</th></tr></thead><tbody>${s.items.map(i=>`<tr><td>${esc(i.barcode||"Sin código")} · ${esc(i.name)}</td><td>${i.qty}</td><td>${money(i.price)}</td><td>${money(i.discount||0)}</td><td>${money(cents(i.price*i.qty-(i.discount||0)))}</td></tr>`).join("")}</tbody></table></div></div>
     <div class="detail-box"><p>Subtotal: ${money(s.subtotal)}</p><p>Descuento: −${money(s.discount||0)}</p><p>Recargo: +${money(s.surcharge||0)}</p><strong>Total: ${money(s.total)}</strong>
     <p>Medio de pago: ${s.method}${s.method==="Mixto"?` · ${Object.entries(payments).filter(([,n])=>n>0).map(([m,n])=>`${m} ${money(n)}`).join(" · ")}`:""}</p></div>`;
 }
@@ -368,17 +368,17 @@ function renderProducts(){
   fillCategorySelects();
   const q=$("#productSearch").value.toLowerCase(),cat=$("#categoryFilter").value,sf=$("#stockFilter").value,st=$("#productStatusFilter").value;
   const rows=state.products.filter(p=>{
-    const match=(`${p.code} ${p.name} ${p.category} ${p.barcode||""}`).toLowerCase().includes(q);
+    const match=(`${p.barcode||""} ${p.name} ${p.category}`).toLowerCase().includes(q);
     const stockOk=!sf||(sf==="low"&&p.stock<=p.min&&p.stock>0)||(sf==="ok"&&p.stock>p.min)||(sf==="zero"&&p.stock<=0);
     return match&&(!cat||p.category===cat)&&stockOk&&(!st||p.status===st);
   });
    $("#productsTable").innerHTML=rows.map(p=>`<tr>
-     <td>${esc(p.code)}</td><td><b>${esc(p.name)}</b></td><td>${esc(p.category)}</td><td>${esc(p.unit)}</td>${isAdmin()?`<td>${money(p.cost)}</td>`:""}<td>${money(p.price)}</td><td><b>${p.stock}</b></td><td>${p.min}</td>
+     <td>${esc(p.barcode||"—")}</td><td><b>${esc(p.name)}</b></td><td>${esc(p.category)}</td><td>${esc(p.unit)}</td>${isAdmin()?`<td>${money(p.cost)}</td>`:""}<td>${money(p.price)}</td><td><b>${p.stock}</b></td><td>${p.min}</td>
      <td>${badge(p.status)}<div class="status-text">${stockBadge(p)}</div></td>
      <td><div class="action-row"><button class="table-btn" onclick="detailProduct(${p.id})">Ver</button>${isAdmin()?`<button class="table-btn" onclick="editProduct(${p.id})">Editar</button><button class="table-btn" onclick="toggleProduct(${p.id})">${p.status==="Activo"?"Desactivar":"Activar"}</button>`:""}</div></td>
    </tr>`).join("");
 }
-window.detailProduct=id=>{const p=state.products.find(x=>x.id===id);detail(`Producto ${p.code}`,`<p>${esc(p.name)} · ${esc(p.category)} · ${esc(p.unit)}</p><p>Venta: ${money(p.price)}${isAdmin()?` · Costo: ${money(p.cost)}`:""}</p>${p.barcode?`<p>Barcode: ${esc(p.barcode)}</p>`:""}<p>Stock: ${p.stock} · Mínimo: ${p.min} · ${p.status}</p>`)};
+window.detailProduct=id=>{const p=state.products.find(x=>x.id===id);detail(p.name,`<p>Código de barras: ${esc(p.barcode||"sin código")}</p><p>${esc(p.category)} · ${esc(p.unit)}</p><p>Venta: ${money(p.price)}${isAdmin()?` · Costo: ${money(p.cost)}`:""}</p><p>Stock: ${p.stock} · Mínimo: ${p.min} · ${p.status}</p>`)};
 function barcodeField(p={}){
   const value=esc(p.barcode||"");
   return `<div class="span-2 barcode-field">
@@ -387,14 +387,13 @@ function barcodeField(p={}){
       <input id="barcodeInput" name="barcode" inputmode="numeric" pattern="[0-9]*" maxlength="13" value="${value}" placeholder="7791000000017" autocomplete="off">
       <button type="button" class="btn scan-btn" data-scan-for="barcode">${ZXING_AVAILABLE?"Escanear con la cámara":"Escáner no disponible"}</button>
     </div>
-    <small class="form-help">Opcional. Entre 8 y 13 dígitos. Podés escribirlo a mano o escanearlo: el escáner solo traduce las barras al número, no busca productos.</small>
+    <small class="form-help">Es el código con el que se identifica el producto. Opcional, entre 8 y 13 dígitos: podés escribirlo a mano o escanearlo, y el escáner solo traduce las barras al número, no busca productos.</small>
   </div>`;
 }
 function productFields(p={}){
    const cats=activeCategories().map(c=>`<option ${p.category===c.name?"selected":""}>${esc(c.name)}</option>`).join("");
   return `<div class="form-grid">
-     <div><label>Código</label><input name="code" required value="${esc(p.code)}"></div>
-     <div><label>Nombre del producto</label><input name="name" required value="${esc(p.name)}"></div>
+    <div class="span-2"><label>Nombre del producto</label><input name="name" required value="${esc(p.name)}"></div>
      ${barcodeField(p)}
      <div><label>Categoría</label><select name="category">${cats}${p.category&&!activeCategories().some(c=>c.name===p.category)?`<option selected>${esc(p.category)}</option>`:""}</select></div>
     <div><label>Unidad</label><select name="unit">${["unidad","metro","kilo","caja","rollo","bolsa","balde"].map(x=>`<option ${p.unit===x?"selected":""}>${x}</option>`).join("")}</select></div>
@@ -411,7 +410,7 @@ function validBarcode(value,id){
   if(state.products.some(p=>p.id!==id&&p.barcode===code))return fail("Ese código de barras ya está asignado a otro producto");
   return code;
 }
-function productData(fd,id){const code=fd.get("code").trim(),name=fd.get("name").trim(),stock=+fd.get("stock"),min=+fd.get("min"),cost=+fd.get("cost"),price=+fd.get("price");if(!code||!name)return fail("Completá código y nombre");if(state.products.some(p=>p.id!==id&&p.code.toLowerCase()===code.toLowerCase()))return fail("El código ya existe");if(!fd.get("category"))return fail("Seleccioná una categoría activa");if(![stock,min,cost,price].every(n=>validNumber(n)))return fail("Precios y stock no pueden ser negativos");const barcode=validBarcode(fd.get("barcode"),id);if(barcode===false)return false;return {code,name,barcode,category:fd.get("category"),unit:fd.get("unit"),stock,min,cost,price}}
+function productData(fd,id){const name=fd.get("name").trim(),stock=+fd.get("stock"),min=+fd.get("min"),cost=+fd.get("cost"),price=+fd.get("price");if(!name)return fail("Completá el nombre del producto");if(!fd.get("category"))return fail("Seleccioná una categoría activa");if(![stock,min,cost,price].every(n=>validNumber(n)))return fail("Precios y stock no pueden ser negativos");const barcode=validBarcode(fd.get("barcode"),id);if(barcode===false)return false;return {name,barcode,category:fd.get("category"),unit:fd.get("unit"),stock,min,cost,price}}
 function recordAdjustment(p,delta,reason){if(!delta)return;state.moves.unshift({id:nextId(state.moves),...stamp(),productId:p.id,product:p.name,type:"Ajuste",qty:delta,reason,user:currentUser.name,status:"Vigente",linked:null})}
 function addProduct(){if(!isAdmin())return;openModal("Nuevo producto",productFields(),fd=>{const data=productData(fd);if(!data)return false;const p={id:nextId(state.products),...data,status:"Activo"};state.products.unshift(p);recordAdjustment(p,p.stock,"Stock inicial del producto");return true})}
 window.editProduct=id=>{if(!isAdmin())return;const p=state.products.find(x=>x.id===id);openModal("Editar producto",productFields(p),fd=>{const data=productData(fd,id);if(!data)return false;const delta=data.stock-p.stock;Object.assign(p,data);recordAdjustment(p,delta,"Corrección de stock en ficha de producto");return true})}
@@ -440,7 +439,7 @@ function renderMoves(){
 }
 window.viewMove=id=>{const m=state.moves.find(x=>x.id===id);detail(`Movimiento ${id}`,`<p>${esc(m.product)} · ${m.type} ${m.qty}</p><p>${fmtDate(m.date)} ${m.time} · ${esc(m.user)}</p><p>Motivo: ${esc(m.reason)} · ${m.status}</p><p>${m.linked?`Operación: ${esc(m.linked)}`:"Movimiento manual"}</p>`)};
 function addMove(){
-   const opts=activeProducts().map(p=>`<option value="${p.id}">${esc(p.code)} · ${esc(p.name)}</option>`).join("");
+   const opts=activeProducts().map(p=>`<option value="${p.id}">${esc(p.barcode||"Sin código")} · ${esc(p.name)}</option>`).join("");
    openModal("Registrar movimiento de stock",`<div class="form-grid">
      <div class="span-2"><label>Producto</label><select name="product">${opts}</select></div>
      <div><label>Tipo</label><select name="type"><option>Entrada</option><option>Salida</option><option>Ajuste</option></select></div>
@@ -463,10 +462,10 @@ function renderPurchases(){
    $("#purchasesTable").innerHTML=rows.map(x=>`<tr><td><b>${x.id}</b></td><td>${fmtDate(x.date)} ${x.time||""}</td><td>${esc(x.reference)}</td><td>${esc((x.items||[]).map(i=>`${i.qty} × ${i.name}`).join(", ")||x.detail||"")}</td><td><b>${money(x.total)}</b></td><td>${x.method}</td><td>${badge(x.status)}</td>
      <td><div class="action-row"><button class="table-btn" onclick="viewPurchase('${x.id}')">Ver</button>${x.status==="Vigente"?`<button class="table-btn" onclick="editPurchase('${x.id}')">Editar</button><button class="table-btn" onclick="voidPurchase('${x.id}')">Anular</button>`:""}</div></td></tr>`).join("");
 }
-function purchaseLine(i={}){const cost=i.cost??state.products.find(p=>p.id===i.pid)?.cost??activeProducts()[0]?.cost??0,options=state.products.filter(p=>p.status==="Activo"||p.id===i.pid);return `<div class="purchase-line"><select class="line-product" aria-label="Producto">${options.map(p=>`<option value="${p.id}" ${p.id===i.pid?"selected":""}>${esc(p.code)} · ${esc(p.name)}</option>`).join("")}</select><input class="line-qty" aria-label="Cantidad" type="number" min=".01" step=".01" value="${i.qty||1}" required><input class="line-cost" aria-label="Costo unitario" type="number" min="0" step=".01" value="${cost}" required><strong class="line-subtotal">${money((i.qty||1)*cost)}</strong><button type="button" class="table-btn remove-line">Quitar</button></div>`}
+function purchaseLine(i={}){const cost=i.cost??state.products.find(p=>p.id===i.pid)?.cost??activeProducts()[0]?.cost??0,options=state.products.filter(p=>p.status==="Activo"||p.id===i.pid);return `<div class="purchase-line"><select class="line-product" aria-label="Producto">${options.map(p=>`<option value="${p.id}" ${p.id===i.pid?"selected":""}>${esc(p.barcode||"Sin código")} · ${esc(p.name)}</option>`).join("")}</select><input class="line-qty" aria-label="Cantidad" type="number" min=".01" step=".01" value="${i.qty||1}" required><input class="line-cost" aria-label="Costo unitario" type="number" min="0" step=".01" value="${cost}" required><strong class="line-subtotal">${money((i.qty||1)*cost)}</strong><button type="button" class="table-btn remove-line">Quitar</button></div>`}
 function purchaseFields(p={}){return `<div class="form-grid"><div><label>Comercio / referencia</label><input name="reference" required value="${esc(p.reference)}"></div><div><label>Medio de pago</label><select name="method">${["Efectivo","Transferencia","Tarjeta","Mixto"].map(x=>`<option ${p.method===x?"selected":""}>${x}</option>`).join("")}</select></div></div><h4>Productos</h4><div class="purchase-head"><span>Producto</span><span>Cantidad</span><span>Costo unitario</span><span>Subtotal</span><span></span></div><div id="purchaseLines">${(p.items?.length?p.items:[{}]).map(purchaseLine).join("")}</div><button type="button" id="addPurchaseLine" class="btn light small">Agregar producto</button><div class="checkout-line"><span>Total compra</span><strong id="purchaseTotal">$0</strong></div>`}
 function purchaseEditor(p){if(!activeProducts().length)return fail("Creá un producto activo antes de registrar compras");openModal(p?`Editar compra ${p.id}`:"Nueva compra",purchaseFields(p),fd=>{
-   const reference=fd.get("reference").trim();if(!reference)return fail("Ingresá el comercio o referencia");const items=[...$$("#purchaseLines .purchase-line")].map(el=>{const product=state.products.find(x=>x.id===+el.querySelector(".line-product").value);return {pid:product.id,code:product.code,name:product.name,qty:+el.querySelector(".line-qty").value,cost:+el.querySelector(".line-cost").value}});
+   const reference=fd.get("reference").trim();if(!reference)return fail("Ingresá el comercio o referencia");const items=[...$$("#purchaseLines .purchase-line")].map(el=>{const product=state.products.find(x=>x.id===+el.querySelector(".line-product").value);return {pid:product.id,barcode:product.barcode,name:product.name,qty:+el.querySelector(".line-qty").value,cost:+el.querySelector(".line-cost").value}});
    if(!items.length||items.some(i=>!validNumber(i.qty,.01)||!validNumber(i.cost)))return fail("Agregá productos con cantidades positivas y costos válidos");
    if(new Set(items.map(i=>i.pid)).size!==items.length)return fail("No repitas productos: unificá sus cantidades en una línea");
    const old=p?.items||[],delta=new Map();for(const i of old)delta.set(i.pid,(delta.get(i.pid)||0)-i.qty);for(const i of items)delta.set(i.pid,(delta.get(i.pid)||0)+i.qty);
@@ -481,7 +480,7 @@ function purchaseEditor(p){if(!activeProducts().length)return fail("Creá un pro
 function recalcPurchase(){$$("#purchaseLines .purchase-line").forEach(el=>el.querySelector(".line-subtotal").textContent=money(+el.querySelector(".line-qty").value*+el.querySelector(".line-cost").value));$("#purchaseTotal").textContent=money($$("#purchaseLines .purchase-line").reduce((s,el)=>s+(+el.querySelector(".line-qty").value*+el.querySelector(".line-cost").value),0))}
 function addPurchase(){purchaseEditor()}
 window.editPurchase=id=>{if(!isAdmin())return;const p=state.purchases.find(x=>x.id===id);if(p?.status==="Vigente"&&p.items?.length)purchaseEditor(p);else fail("Esta compra anterior no tiene productos asociados; solo puede consultarse o anularse")};
-window.viewPurchase=id=>{const p=state.purchases.find(x=>x.id===id);detail(`Compra ${id}`,`<p>${fmtDate(p.date)} ${p.time||""} · ${esc(p.reference)} · ${p.status}</p>${(p.items||[]).map(i=>`<p>${esc(i.code)} · ${esc(i.name)}: ${i.qty} × ${money(i.cost)} = ${money(i.qty*i.cost)}</p>`).join("")||`<p>${esc(p.detail||"Sin detalle")}</p>`}<p>Total: ${money(p.total)} · ${p.method}</p>`)};
+window.viewPurchase=id=>{const p=state.purchases.find(x=>x.id===id);detail(`Compra ${id}`,`<p>${fmtDate(p.date)} ${p.time||""} · ${esc(p.reference)} · ${p.status}</p>${(p.items||[]).map(i=>`<p>${esc(i.barcode||"Sin código")} · ${esc(i.name)}: ${i.qty} × ${money(i.cost)} = ${money(i.qty*i.cost)}</p>`).join("")||`<p>${esc(p.detail||"Sin detalle")}</p>`}<p>Total: ${money(p.total)} · ${p.method}</p>`)};
 window.voidPurchase=id=>{if(!isAdmin())return;const p=state.purchases.find(x=>x.id===id);if(!p||p.status==="Anulada")return;if((p.items||[]).some(i=>state.products.find(x=>x.id===i.pid)?.stock<i.qty))return fail("No se puede anular: parte de la mercadería ya fue vendida o utilizada");if(!confirm(`¿Anular la compra ${id}? Se revertirá el stock y el egreso.`))return;for(const i of p.items||[]){const product=state.products.find(x=>x.id===i.pid);if(product){product.stock-=i.qty;if(i.previousCost!=null&&product.cost===i.cost)product.cost=i.previousCost}}p.status="Anulada";state.moves.filter(m=>m.linked===id).forEach(m=>m.status="Anulado");state.accounting.filter(a=>a.linked===id).forEach(a=>a.status="Anulado");save();renderAll();notify("Compra anulada")}
 
 /* Accounting CRUD */
